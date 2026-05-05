@@ -1,0 +1,12 @@
+{
+    "required": true,
+    "package": "com.bizcub.template.mixin",
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "mixins": [
+    ],
+    "client": [
+        "CreateWorldScreenMixin"
+    ]
+}

@@ -1,0 +1,18 @@
+package com.bizcub.template;
+
+import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Main {
+    public static final String MOD_ID = /*$ mod_id*/ "enhanced_world_creation";
+    public static final Map<String, WorldCreationUiState.SelectedGameMode> GAME_MODES = new HashMap<>();
+
+    public static void init() {
+        GAME_MODES.put("survival", WorldCreationUiState.SelectedGameMode.SURVIVAL);
+        GAME_MODES.put("hardcore", WorldCreationUiState.SelectedGameMode.HARDCORE);
+        GAME_MODES.put("creative", WorldCreationUiState.SelectedGameMode.CREATIVE);
+        GAME_MODES.put("spectator", WorldCreationUiState.SelectedGameMode.DEBUG);
+    }
+}
