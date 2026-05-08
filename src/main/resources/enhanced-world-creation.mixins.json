@@ -1,6 +1,6 @@
 {
     "required": true,
-    "package": "com.bizcub.template.mixin",
+    "package": "com.bizcub.enhanced_world_creation.mixin",
     "injectors": {
         "defaultRequire": 1
     },

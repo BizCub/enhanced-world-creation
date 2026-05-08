@@ -1,0 +1,11 @@
+{
+    "text.autoconfig.enhanced_world_creation.title": "Enhanced World Creation",
+    "text.autoconfig.enhanced_world_creation.option.worldName": "World Name",
+    "text.autoconfig.enhanced_world_creation.option.gameModes": "Game Mode",
+    "text.autoconfig.enhanced_world_creation.option.difficulties": "Difficulty",
+    "text.autoconfig.enhanced_world_creation.option.allowCommands": "Allow Commands",
+    "text.autoconfig.enhanced_world_creation.option.worldTypes": "World Type",
+    "text.autoconfig.enhanced_world_creation.option.seed": "Seed",
+    "text.autoconfig.enhanced_world_creation.option.generateStructures": "Generate Structures",
+    "text.autoconfig.enhanced_world_creation.option.bonusChest": "Bonus Chest"
+}

@@ -24,7 +24,4 @@ stonecutter.create(rootProject) {
         version("$version-$it", version).buildscript = "scripts/$it$suffix.gradle.kts"
     }
     match("26.1.2", fb, fr, nf)
-    match("1.21.1", fr, nf)
-    match("1.17.1", fr)
-    match("1.16.5", fb, fr)
 }

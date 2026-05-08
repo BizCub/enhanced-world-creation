@@ -1,0 +1,10 @@
+{
+    "text.autoconfig.enhanced_world_creation.option.worldName": "Название мира",
+    "text.autoconfig.enhanced_world_creation.option.gameModes": "Режим игры",
+    "text.autoconfig.enhanced_world_creation.option.difficulties": "Сложность",
+    "text.autoconfig.enhanced_world_creation.option.allowCommands": "Использование команд",
+    "text.autoconfig.enhanced_world_creation.option.worldTypes": "Тип мира",
+    "text.autoconfig.enhanced_world_creation.option.seed": "Ключ для генерации мира",
+    "text.autoconfig.enhanced_world_creation.option.generateStructures": "Генерация строений",
+    "text.autoconfig.enhanced_world_creation.option.bonusChest": "Бонусный сундук"
+}

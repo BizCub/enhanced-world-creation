@@ -1,5 +1,6 @@
-package com.bizcub.template;
+package com.bizcub.enhanced_world_creation;
 
+import com.bizcub.enhanced_world_creation.config.ModConfig;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 
 import java.util.HashMap;
@@ -10,9 +11,15 @@ public class Main {
     public static final Map<String, WorldCreationUiState.SelectedGameMode> GAME_MODES = new HashMap<>();
 
     public static void init() {
+        getConfig();
+
         GAME_MODES.put("survival", WorldCreationUiState.SelectedGameMode.SURVIVAL);
         GAME_MODES.put("hardcore", WorldCreationUiState.SelectedGameMode.HARDCORE);
         GAME_MODES.put("creative", WorldCreationUiState.SelectedGameMode.CREATIVE);
         GAME_MODES.put("spectator", WorldCreationUiState.SelectedGameMode.DEBUG);
+    }
+
+    public static ModConfig getConfig() {
+        return ModConfig.CONFIG;
     }
 }
