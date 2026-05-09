@@ -1,7 +1,7 @@
-package com.bizcub.enhanced_world_creation.mixin;
+package com.bizcub.enhancedWorldCreation.mixin;
 
-import com.bizcub.enhanced_world_creation.Main;
-import com.bizcub.enhanced_world_creation.config.Compat;
+import com.bizcub.enhancedWorldCreation.Main;
+import com.bizcub.enhancedWorldCreation.config.Compat;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.world.Difficulty;

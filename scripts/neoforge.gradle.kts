@@ -34,6 +34,8 @@ multiloader {
         mods.create(mod.id, Action {
             sourceSet(sourceSets.main.get())
         })
+
+        accessTransformers.from(rootProject.file("src/main/resources/META-INF/accesstransformer.cfg"))
     }
 
     val builtFile = tasks.jar.get().archiveFile
@@ -44,5 +46,9 @@ multiloader {
 
     tasks.named<Copy>("buildAndCollect") {
         from(builtFile)
+    }
+
+    tasks.named("createMinecraftArtifacts") {
+        dependsOn(":${mod.mc}-neoforge:processResources")
     }
 }

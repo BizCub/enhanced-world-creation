@@ -19,6 +19,9 @@ multiloader {
     loom {
         runConfigs.getByName("client") { runDir = clientRunPath }
         runConfigs.getByName("server") { runDir = serverRunPath }
+
+        val awFile = rootProject.file("src/main/resources/${mod.mixin}.aw")
+        accessWidenerPath = sc.process(awFile, "build/processed.aw")
     }
 
     val builtFile = if (isObfuscated)

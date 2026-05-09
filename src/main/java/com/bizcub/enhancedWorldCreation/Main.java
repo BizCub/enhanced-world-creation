@@ -1,6 +1,6 @@
-package com.bizcub.enhanced_world_creation;
+package com.bizcub.enhancedWorldCreation;
 
-import com.bizcub.enhanced_world_creation.config.ModConfig;
+import com.bizcub.enhancedWorldCreation.config.ModConfig;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 
 import java.util.HashMap;

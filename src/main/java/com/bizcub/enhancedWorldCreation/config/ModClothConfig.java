@@ -1,6 +1,6 @@
-package com.bizcub.enhanced_world_creation.config;
+package com.bizcub.enhancedWorldCreation.config;
 
-import com.bizcub.enhanced_world_creation.Main;
+import com.bizcub.enhancedWorldCreation.Main;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;

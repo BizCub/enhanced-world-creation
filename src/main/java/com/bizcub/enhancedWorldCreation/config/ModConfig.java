@@ -1,4 +1,4 @@
-package com.bizcub.enhanced_world_creation.config;
+package com.bizcub.enhancedWorldCreation.config;
 
 import net.minecraft.network.chat.Component;
 

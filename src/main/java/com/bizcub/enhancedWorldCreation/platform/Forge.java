@@ -1,7 +1,7 @@
 //? forge {
-/*package com.bizcub.enhanced_world_creation.platform;
+/*package com.bizcub.enhancedWorldCreation.platform;
 
-import com.bizcub.enhanced_world_creation.Main;
+import com.bizcub.enhancedWorldCreation.Main;
 import com.bizcub.enhanced_world_creation.config.Compat;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModLoadingContext;

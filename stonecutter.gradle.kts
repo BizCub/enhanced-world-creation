@@ -12,4 +12,9 @@ stonecutter parameters {
     properties.tags(version, loader)
     constants.match(node.metadata.project.substringAfterLast('-'), "fabric", "neoforge", "forge")
     swaps["mod_id"] = "\"${property("mod.id")}\";"
+    replacements {
+        string(current.parsed >= "26.1") {
+            replace("accessWidener v2 named", "accessWidener v2 official")
+        }
+    }
 }

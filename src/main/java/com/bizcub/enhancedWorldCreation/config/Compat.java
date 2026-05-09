@@ -1,4 +1,4 @@
-package com.bizcub.enhanced_world_creation.config;
+package com.bizcub.enhancedWorldCreation.config;
 
 //~ auto_config
 import me.shedaniel.autoconfig.AutoConfigClient;

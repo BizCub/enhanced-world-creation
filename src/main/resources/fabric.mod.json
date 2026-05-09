@@ -15,12 +15,13 @@
     },
     "entrypoints": {
         "client": [
-            "com.bizcub.enhanced_world_creation.platform.Fabric"
+            "com.bizcub.enhancedWorldCreation.platform.Fabric"
         ],
         "modmenu": [
-            "com.bizcub.enhanced_world_creation.platform.Fabric$ModMenu"
+            "com.bizcub.enhancedWorldCreation.platform.Fabric$ModMenu"
         ]
     },
+    "accessWidener" : "${mixin}.aw",
     "mixins": [
         "${mixin}.mixins.json"
     ]

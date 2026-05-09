@@ -1,8 +1,8 @@
 //? fabric {
-package com.bizcub.enhanced_world_creation.platform;
+package com.bizcub.enhancedWorldCreation.platform;
 
-import com.bizcub.enhanced_world_creation.Main;
-import com.bizcub.enhanced_world_creation.config.Compat;
+import com.bizcub.enhancedWorldCreation.Main;
+import com.bizcub.enhancedWorldCreation.config.Compat;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import net.fabricmc.api.ClientModInitializer;

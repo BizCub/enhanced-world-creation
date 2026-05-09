@@ -1,12 +1,13 @@
 {
     "required": true,
-    "package": "com.bizcub.enhanced_world_creation.mixin",
+    "package": "com.bizcub.enhancedWorldCreation.mixin",
     "injectors": {
         "defaultRequire": 1
     },
     "mixins": [
     ],
     "client": [
-        "CreateWorldScreenMixin"
+        "CreateWorldScreenMixin",
+        "GameTabMixin"
     ]
 }
