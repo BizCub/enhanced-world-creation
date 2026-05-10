@@ -37,7 +37,7 @@ multiloader {
             }
         }
 
-        accessTransformers.from(rootProject.file("src/main/resources/META-INF/accesstransformer.cfg"))
+        accessTransformers.from(file("build/sourceSets/main/META-INF/accesstransformer.cfg"))
     }
 
     val builtFile = tasks.jar.get().archiveFile

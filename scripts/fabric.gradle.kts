@@ -20,8 +20,8 @@ multiloader {
         runConfigs.getByName("client") { runDir = clientRunPath }
         runConfigs.getByName("server") { runDir = serverRunPath }
 
-        val awFile = rootProject.file("src/main/resources/${mod.mixin}.aw")
-        accessWidenerPath = sc.process(awFile, "build/processed.aw")
+        val awFile = rootProject.file("src/main/resources/${mod.mixin}.ct")
+        accessWidenerPath = sc.process(awFile, "build/resources/main/${mod.mixin}.ct")
     }
 
     val builtFile = if (isObfuscated)
@@ -35,5 +35,9 @@ multiloader {
 
     tasks.named<Copy>("buildAndCollect") {
         from(builtFile)
+    }
+
+    tasks.named("validateAccessWidener") {
+        dependsOn("processResources")
     }
 }

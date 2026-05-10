@@ -21,7 +21,7 @@
             "com.bizcub.enhancedWorldCreation.platform.Fabric$ModMenu"
         ]
     },
-    "accessWidener" : "${mixin}.aw",
+    "accessWidener" : "${mixin}.ct",
     "mixins": [
         "${mixin}.mixins.json"
     ]

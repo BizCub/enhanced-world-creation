@@ -14,7 +14,7 @@ stonecutter parameters {
     swaps["mod_id"] = "\"${property("mod.id")}\";"
     replacements {
         string(current.parsed >= "26.1") {
-            replace("accessWidener v2 named", "accessWidener v2 official")
+            replace("classTweaker v1 named", "classTweaker v1 official")
         }
     }
 }

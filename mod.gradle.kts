@@ -2,9 +2,13 @@ import com.bizcub.multiloader.MultiLoader
 import dev.kikugie.stonecutter.build.StonecutterBuildExtension
 import me.modmuss50.mpp.ModPublishExtension
 
+apply(plugin = "dev.kikugie.fletching-table")
+
 val stonecutter = project.extensions.getByType(StonecutterBuildExtension::class.java)
 
 project.extensions.configure<MultiLoader>("multiloader") {
+    access()
+
     project.afterEvaluate {
         stonecutter.let { sc ->
             sc.constants["is_cloth_config_available"] = isClothConfigAvailable

@@ -2,7 +2,7 @@
 /*package com.bizcub.enhancedWorldCreation.platform;
 
 import com.bizcub.enhancedWorldCreation.Main;
-import com.bizcub.enhanced_world_creation.config.Compat;
+import com.bizcub.enhancedWorldCreation.config.Compat;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
