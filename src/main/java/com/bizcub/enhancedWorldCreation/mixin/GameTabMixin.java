@@ -1,5 +1,8 @@
 package com.bizcub.enhancedWorldCreation.mixin;
 
+import com.bizcub.enhancedWorldCreation.Main;
+import com.bizcub.enhancedWorldCreation.gui.ExtraScreen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
@@ -13,7 +16,11 @@ public class GameTabMixin {
 
     @ModifyVariable(method = "<init>", at = @At("TAIL"))
     private GridLayout.RowHelper screenInit(GridLayout.RowHelper helper) {
-        Button button = Button.builder(Component.literal("Extra Button"), b -> System.out.println("test")).width(210).build();
+        Main.iconPath = "";
+        Main.resourcePackPath = "";
+
+        Button button = Button.builder(Component.literal("Extra Button"), b ->
+                Minecraft.getInstance().setScreen(new ExtraScreen(Minecraft.getInstance().screen))).width(210).build();
 
         helper.addChild(button);
         return helper;

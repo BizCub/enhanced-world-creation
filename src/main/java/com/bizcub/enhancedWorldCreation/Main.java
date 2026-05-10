@@ -10,6 +10,9 @@ public class Main {
     public static final String MOD_ID = /*$ mod_id*/ "enhanced_world_creation";
     public static final Map<String, WorldCreationUiState.SelectedGameMode> GAME_MODES = new HashMap<>();
 
+    public static String iconPath;
+    public static String resourcePackPath;
+
     public static void init() {
         getConfig();
 
