@@ -18,8 +18,10 @@ import java.util.List;
 
 public class ExtraScreen extends Screen {
     private final Screen parent;
+    private final GridLayout gridLayout = new GridLayout();
     private EditBox iconPathBox;
     private EditBox resourcePackPathBox;
+    private StringWidget tip;
 
     public ExtraScreen(Screen parent) {
         super(Component.literal(""));
@@ -28,16 +30,16 @@ public class ExtraScreen extends Screen {
 
     @Override
     protected void init() {
-        GridLayout gridLayout = new GridLayout();
-        gridLayout.defaultCellSetting().paddingHorizontal(4).paddingBottom(4).alignHorizontallyCenter();
-        GridLayout.RowHelper helper = gridLayout.createRowHelper(1);
+        this.gridLayout.defaultCellSetting().paddingHorizontal(4).paddingBottom(4).alignHorizontallyCenter();
+        GridLayout.RowHelper helper = this.gridLayout.createRowHelper(1);
         helper.addChild(new StringWidget(Component.literal("icon"), this.font));
         this.iconPathBox = helper.addChild(new EditBox(this.font, 150, 20, Component.empty()));
         helper.addChild(new StringWidget(Component.literal("rp"), this.font));
         this.resourcePackPathBox = helper.addChild(new EditBox(this.font, 150, 20, Component.empty()));
-        gridLayout.arrangeElements();
-        FrameLayout.alignInRectangle(gridLayout, 0, 0, this.width, this.height, 0.5f, 0.5f);
-        gridLayout.visitWidgets(this::addRenderableWidget);
+        helper.addChild(new StringWidget(Component.empty(), this.font));
+        this.tip = helper.addChild(new StringWidget(Component.literal(""), this.font));
+        this.tip.setMaxWidth(400, StringWidget.TextOverflow.SCROLLING);
+        refreshWidgets();
 
         this.iconPathBox.setMaxLength(1000);
         this.resourcePackPathBox.setMaxLength(1000);
@@ -49,6 +51,12 @@ public class ExtraScreen extends Screen {
         AbstractWidget doneButton = Button.builder(CommonComponents.GUI_DONE, button -> onClose()).pos(this.width / 2 - 75, this.height - 28).size(150, 20).build();
         layout.addToFooter(doneButton);
         layout.visitWidgets(this::addRenderableWidget);
+    }
+    
+    private void refreshWidgets() {
+        this.gridLayout.arrangeElements();
+        FrameLayout.alignInRectangle(this.gridLayout, 0, 0, this.width, this.height, 0.5f, 0.5f);
+        this.gridLayout.visitWidgets(this::addRenderableWidget);
     }
 
     @Override
@@ -67,16 +75,18 @@ public class ExtraScreen extends Screen {
         } else {
             addResourcePack(file.getAbsolutePath());
         }
+        Main.iconPath = iconPathBox.getValue();
+        Main.resourcePackPath = resourcePackPathBox.getValue();
     }
 
     private void addResourcePack(String value) {
+        this.tip.setMessage(Component.literal("For the resource pack to start working, you need to re-enter the world after creation"));
+        refreshWidgets();
         this.resourcePackPathBox.setValue(value);
     }
 
     @Override
     public void onClose() {
-        Main.iconPath = iconPathBox.getValue();
-        Main.resourcePackPath = resourcePackPathBox.getValue();
         this.minecraft.setScreen(this.parent);
     }
 }
