@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -31,6 +32,8 @@ import java.util.zip.ZipOutputStream;
 @Mixin(CreateWorldScreen.class)
 public class CreateWorldScreenMixin {
 
+    @Unique String pathToSavesFolder = Minecraft.getInstance().gameDirectory.getAbsolutePath() + "/saves/";
+
     @Shadow @Final private WorldCreationUiState uiState;
 
     @Inject(method = "<init>", at = @At("TAIL"))
@@ -44,6 +47,7 @@ public class CreateWorldScreenMixin {
         uiState.setName(Main.getConfig().worldName());
         uiState.setGameMode(Main.GAME_MODES.get(Main.getConfig().gameModes().getName()));
         uiState.setDifficulty(Difficulty.byName(Main.getConfig().difficulties().getName()));
+        //~ if >=1.21 'setAllowCheats' -> 'setAllowCommands'
         uiState.setAllowCommands(Main.getConfig().allowCommands());
 
         uiState.setWorldType(worldPresets.get(Main.getConfig().worldTypes().getKey()));
@@ -53,13 +57,13 @@ public class CreateWorldScreenMixin {
     }
 
     @Inject(method = "createNewWorld", at = @At("HEAD"))
-    private void createRPFolder(CallbackInfoReturnable<Boolean> cir) {
-        new File(Minecraft.getInstance().gameDirectory.getAbsolutePath() + "/saves/" + uiState.getTargetFolder() + "/resourcepacks").mkdirs();
+    private void createRPFolder(/*? >=1.21.2 {*/ CallbackInfoReturnable<Boolean> cir /*?} else {*/ /*CallbackInfo ci *//*?}*/) {
+        new File(pathToSavesFolder + uiState.getTargetFolder() + "/resourcepacks").mkdirs();
     }
 
     @Inject(method = "createNewWorld", at = @At("TAIL"))
-    private void copyResources(CallbackInfoReturnable<Boolean> cir) throws IOException {
-        String pathToWorld = Minecraft.getInstance().gameDirectory.getAbsolutePath() + "/saves/";
+    private void copyResources(/*? >=1.21.2 {*/ CallbackInfoReturnable<Boolean> cir /*?} else {*/ /*CallbackInfo ci *//*?}*/) throws IOException {
+        String pathToWorld = pathToSavesFolder;
 
         if (!Main.iconPath.isEmpty()) {
             try {
@@ -86,8 +90,6 @@ public class CreateWorldScreenMixin {
         if (!Main.resourcePackPath.isEmpty()) {
             String inputPath = Main.resourcePackPath;
             String outputPath = pathToWorld + uiState.getTargetFolder() + LevelResource.MAP_RESOURCE_FILE;
-
-            System.out.println(new File(outputPath).canWrite());
 
             if (new File(inputPath).isFile()) {
                 try {

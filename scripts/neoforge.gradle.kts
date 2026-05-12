@@ -49,6 +49,6 @@ multiloader {
     }
 
     tasks.named("createMinecraftArtifacts") {
-        dependsOn(":${mod.mc}-neoforge:processResources")
+        dependsOn("processResources")
     }
 }

@@ -14,6 +14,9 @@ project.extensions.configure<MultiLoader>("multiloader") {
             sc.constants["is_cloth_config_available"] = isClothConfigAvailable
 
             sc.replacements {
+                string(scp >= "26.1", "!graphics") {
+                    replace("GuiGraphics", "GuiGraphicsExtractor")
+                }
                 string(scp >= "1.21.11" && !isForge, "auto_config") {
                     replace("AutoConfig", "AutoConfigClient")
                 }
@@ -28,6 +31,7 @@ project.extensions.configure<MultiLoader>("multiloader") {
         addRepository("https://maven.terraformersmc.com/releases")
 
         addDependency("implementation", "net.fabricmc:fabric-loader:${getDep("fabric")}")
+        addDependency("implementation", "net.fabricmc.fabric-api:fabric-api:${getDep("fabric-api")}")
         addDependency("api", "com.terraformersmc:modmenu:${getDep("modmenu")}")
     }
 

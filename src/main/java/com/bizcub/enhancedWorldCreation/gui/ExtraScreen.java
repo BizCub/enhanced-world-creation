@@ -1,10 +1,8 @@
 package com.bizcub.enhancedWorldCreation.gui;
 
 import com.bizcub.enhancedWorldCreation.Main;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.StringWidget;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
@@ -21,7 +19,7 @@ public class ExtraScreen extends Screen {
     private final GridLayout gridLayout = new GridLayout();
     private EditBox iconPathBox;
     private EditBox resourcePackPathBox;
-    private StringWidget tip;
+    private MultiLineTextWidget tip;
 
     public ExtraScreen(Screen parent) {
         super(Component.literal(""));
@@ -33,12 +31,12 @@ public class ExtraScreen extends Screen {
         this.gridLayout.defaultCellSetting().paddingHorizontal(4).paddingBottom(4).alignHorizontallyCenter();
         GridLayout.RowHelper helper = this.gridLayout.createRowHelper(1);
         helper.addChild(new StringWidget(Component.literal("icon"), this.font));
-        this.iconPathBox = helper.addChild(new EditBox(this.font, 150, 20, Component.empty()));
+        this.iconPathBox = helper.addChild(new EditBox(this.font, 0, 0, 150, 20, Component.empty()));
         helper.addChild(new StringWidget(Component.literal("rp"), this.font));
-        this.resourcePackPathBox = helper.addChild(new EditBox(this.font, 150, 20, Component.empty()));
+        this.resourcePackPathBox = helper.addChild(new EditBox(this.font, 0, 0, 150, 20, Component.empty()));
         helper.addChild(new StringWidget(Component.empty(), this.font));
-        this.tip = helper.addChild(new StringWidget(Component.literal(""), this.font));
-        this.tip.setMaxWidth(400, StringWidget.TextOverflow.SCROLLING);
+        this.tip = this.addRenderableWidget(new MultiLineTextWidget(this.width / 2 - 110, this.height - 75, Component.empty(), this.font));
+        this.tip.setCentered(true).setMaxWidth(250);
         refreshWidgets();
 
         this.iconPathBox.setMaxLength(1000);
@@ -57,6 +55,13 @@ public class ExtraScreen extends Screen {
         this.gridLayout.arrangeElements();
         FrameLayout.alignInRectangle(this.gridLayout, 0, 0, this.width, this.height, 0.5f, 0.5f);
         this.gridLayout.visitWidgets(this::addRenderableWidget);
+    }
+
+    @Override //~ if >=26.1 'render(' -> 'extractRenderState(' {
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int i, int j, float f) {
+        //? <1.20.5
+        //this.renderBackground(guiGraphics /*? >=1.20.2 {*/, i, j, f/*?}*/);
+        super.extractRenderState(guiGraphics, i, j, f);//~}
     }
 
     @Override

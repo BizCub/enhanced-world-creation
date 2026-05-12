@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(CreateWorldScreen.GameTab.class)
 public class GameTabMixin {
 
-    @ModifyVariable(method = "<init>", at = @At("TAIL"))
+    @ModifyVariable(method = "<init>", at = @At("TAIL"), ordinal = 0)
     private GridLayout.RowHelper screenInit(GridLayout.RowHelper helper) {
         Main.iconPath = "";
         Main.resourcePackPath = "";
