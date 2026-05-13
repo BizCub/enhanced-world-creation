@@ -26,7 +26,8 @@ multiloader {
         runConfigs.getByName("server") { runDir = serverRunPath }
 
         forge.mixinConfigs("${mod.mixin}.mixins.json")
-        accessWidenerPath = rootProject.file("src/main/resources/${mod.mixin}.ct")
+        val awFile = file("build/generated/stonecutter/main/resources/${mod.mixin}.ct")
+        if (awFile.exists()) accessWidenerPath = awFile
 
         decompilers {
             get("vineflower").apply {
@@ -47,5 +48,9 @@ multiloader {
 
     tasks.remapJar {
         injectAccessWidener = true
+    }
+
+    tasks.named("validateAccessWidener") {
+        dependsOn("processResources")
     }
 }
