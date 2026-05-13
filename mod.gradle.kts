@@ -24,19 +24,16 @@ project.extensions.configure<MultiLoader>("multiloader") {
         }
     }
 
-    addRepository("https://maven.shedaniel.me")
-    addDependency("api", "me.shedaniel.cloth:cloth-config-${mod.loader}:${getDep("cloth-config")?.split("+")?.first()}")
+    addRepositoryWithDependency("maven.shedaniel.me", "api", "me.shedaniel.cloth:cloth-config-${mod.loader}:${getDep("cloth-config")?.split("+")?.first()}")
 
     if (isFabric) {
-        addRepository("https://maven.terraformersmc.com/releases")
-
         addDependency("implementation", "net.fabricmc:fabric-loader:${getDep("fabric")}")
         addDependency("implementation", "net.fabricmc.fabric-api:fabric-api:${getDep("fabric-api")}")
-        addDependency("api", "com.terraformersmc:modmenu:${getDep("modmenu")}")
+        addRepositoryWithDependency("maven.terraformersmc.com/releases", "api", "com.terraformersmc:modmenu:${getDep("modmenu")}")
     }
 
     if (isNeoForge) {
-        addRepository("https://maven.neoforged.net/releases")
+        addRepository("maven.neoforged.net/releases")
     }
 
     project.extensions.configure<ModPublishExtension>("publishMods") {
