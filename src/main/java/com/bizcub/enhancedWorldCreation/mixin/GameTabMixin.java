@@ -19,7 +19,7 @@ public class GameTabMixin {
         Main.iconPath = "";
         Main.resourcePackPath = "";
 
-        Button button = Button.builder(Component.literal("Extra Button"), b ->
+        Button button = Button.builder(Component.translatable("enhanced_world_creation.extra.button"), b ->
                 Minecraft.getInstance().setScreen(new ExtraScreen(Minecraft.getInstance().screen))).width(210).build();
 
         helper.addChild(button);

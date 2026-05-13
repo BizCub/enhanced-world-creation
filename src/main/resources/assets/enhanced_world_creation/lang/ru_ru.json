@@ -6,5 +6,11 @@
     "text.autoconfig.enhanced_world_creation.option.worldTypes": "Тип мира",
     "text.autoconfig.enhanced_world_creation.option.seed": "Ключ для генерации мира",
     "text.autoconfig.enhanced_world_creation.option.generateStructures": "Генерация строений",
-    "text.autoconfig.enhanced_world_creation.option.bonusChest": "Бонусный сундук"
+    "text.autoconfig.enhanced_world_creation.option.bonusChest": "Бонусный сундук",
+
+    "enhanced_world_creation.extra.button": "Дополнительные настройки",
+    "enhanced_world_creation.extra.on_files_drop": "Для заполнения полей вы можете перетащить файл на экран.",
+    "enhanced_world_creation.extra.icon": "Иконка мира",
+    "enhanced_world_creation.extra.rp": "Мировой пакет ресурсов",
+    "enhanced_world_creation.extra.rp.warning": "Чтобы пакет ресурсов начал работать, вам нужно перезайти в мир после его создания"
 }

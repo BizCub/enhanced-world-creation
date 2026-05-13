@@ -22,7 +22,7 @@ public class ExtraScreen extends Screen {
     private MultiLineTextWidget tip;
 
     public ExtraScreen(Screen parent) {
-        super(Component.literal(""));
+        super(Component.empty());
         this.parent = parent;
     }
 
@@ -30,12 +30,12 @@ public class ExtraScreen extends Screen {
     protected void init() {
         this.gridLayout.defaultCellSetting().paddingHorizontal(4).paddingBottom(4).alignHorizontallyCenter();
         GridLayout.RowHelper helper = this.gridLayout.createRowHelper(1);
-        helper.addChild(new StringWidget(Component.literal("icon"), this.font));
+        helper.addChild(new StringWidget(Component.translatable("enhanced_world_creation.extra.icon"), this.font));
         this.iconPathBox = helper.addChild(new EditBox(this.font, 0, 0, 150, 20, Component.empty()));
-        helper.addChild(new StringWidget(Component.literal("rp"), this.font));
+        helper.addChild(new StringWidget(Component.translatable("enhanced_world_creation.extra.rp"), this.font));
         this.resourcePackPathBox = helper.addChild(new EditBox(this.font, 0, 0, 150, 20, Component.empty()));
         helper.addChild(new StringWidget(Component.empty(), this.font));
-        this.tip = this.addRenderableWidget(new MultiLineTextWidget(this.width / 2 - 110, this.height - 75, Component.empty(), this.font));
+        this.tip = this.addRenderableWidget(new MultiLineTextWidget(this.width / 2 - 110, this.height - 75, Component.translatable("enhanced_world_creation.extra.on_files_drop"), this.font));
         this.tip.setCentered(true).setMaxWidth(250);
         refreshWidgets();
 
@@ -66,10 +66,10 @@ public class ExtraScreen extends Screen {
 
     @Override
     public void onFilesDrop(List<Path> files) {
-        File file = files.getFirst().toFile();
+        File file = files.get(0).toFile();
 
         if (file.isFile()) {
-            var list = files.getFirst().toString().split("\\.");
+            var list = files.get(0).toString().split("\\.");
             String extension = list[list.length - 1];
 
             switch (extension) {
@@ -85,7 +85,7 @@ public class ExtraScreen extends Screen {
     }
 
     private void addResourcePack(String value) {
-        this.tip.setMessage(Component.literal("For the resource pack to start working, you need to re-enter the world after creation"));
+        this.tip.setMessage(Component.translatable("enhanced_world_creation.extra.rp.warning"));
         refreshWidgets();
         this.resourcePackPathBox.setValue(value);
     }
