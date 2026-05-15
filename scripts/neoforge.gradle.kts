@@ -35,7 +35,8 @@ multiloader {
             sourceSet(sourceSets.main.get())
         })
 
-        accessTransformers.from(file("build/resources/main/META-INF/accesstransformer.cfg"))
+        val acFile = file(atNeoForgePath)
+        if (acFile.exists()) accessTransformers.from(acFile)
     }
 
     val builtFile = tasks.jar.get().archiveFile

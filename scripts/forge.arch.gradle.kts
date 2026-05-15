@@ -26,7 +26,7 @@ multiloader {
         runConfigs.getByName("server") { runDir = serverRunPath }
 
         forge.mixinConfigs("${mod.mixin}.mixins.json")
-        val awFile = file("build/generated/stonecutter/main/resources/${mod.mixin}.ct")
+        val awFile = file(ctForgeArchPath)
         if (awFile.exists()) accessWidenerPath = awFile
 
         decompilers {
