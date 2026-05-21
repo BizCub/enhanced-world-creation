@@ -4,8 +4,20 @@ import com.bizcub.enhancedWorldCreation.Main;
 import com.bizcub.enhancedWorldCreation.config.Compat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
+import net.minecraft.client.gui.screens.worldselection.PresetEditor;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.FlatLevelSource;
+import net.minecraft.world.level.levelgen.flat.FlatLayerInfo;
+import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 import net.minecraft.world.level.storage.LevelResource;
 import org.apache.commons.io.FileUtils;
 import org.spongepowered.asm.mixin.Final;
@@ -25,6 +37,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -54,6 +67,49 @@ public class CreateWorldScreenMixin {
         uiState.setSeed(Main.getConfig().seed());
         uiState.setGenerateStructures(Main.getConfig().generateStructures());
         uiState.setBonusChest(Main.getConfig().bonusChest());
+
+        if (uiState.getSettings().selectedDimensions().overworld() instanceof FlatLevelSource flatLevelSource) {
+            FlatLevelGeneratorSettings settings = flatLevelSource.settings();
+
+            var layersInfo = settings.getLayersInfo();
+            layersInfo.clear();
+            Main.getConfig().flatLayers().reversed().forEach(flatLayer -> {
+                String layer;
+                int blockCount;
+                if (flatLayer.split("\\*").length >= 2) {
+                    layer = List.of(flatLayer.split("\\*")).get(1);
+                    blockCount = Integer.parseInt(List.of(flatLayer.split("\\*")).get(0));
+                } else {
+                    layer = flatLayer;
+                    blockCount = 1;
+                }
+                layersInfo.add(new FlatLayerInfo(blockCount, getBlockById(layer)));
+            });
+
+            uiState.updateDimensions(PresetEditor.flatWorldConfigurator(settings.withBiomeAndLayers(
+                    layersInfo,
+                    settings.structureOverrides(),
+                    getBiomeById("ocean")
+            )));
+        } else {
+            uiState.updateDimensions(PresetEditor.fixedBiomeConfigurator(getBiomeById("meadow")));
+        }
+    }
+
+    @Unique
+    private Holder<Biome> getBiomeById(String biomeId) {
+        RegistryAccess registryAccess = uiState.getSettings().worldgenLoadContext();
+        ResourceKey<Biome> biomeKey = ResourceKey.create(Registries.BIOME, Identifier.withDefaultNamespace(biomeId));
+        Registry<Biome> biomes = registryAccess.lookupOrThrow(Registries.BIOME);
+        return biomes.getOrThrow(biomeKey);
+    }
+
+    @Unique
+    private Block getBlockById(String blockId) {
+        RegistryAccess registryAccess = uiState.getSettings().worldgenLoadContext();
+        ResourceKey<Block> stoneKey = ResourceKey.create(Registries.BLOCK, Identifier.withDefaultNamespace(blockId));
+        Registry<Block> blocks = registryAccess.lookupOrThrow(Registries.BLOCK);
+        return blocks.getValue(stoneKey);
     }
 
     @Inject(method = "createNewWorld", at = @At("HEAD"))

@@ -9,6 +9,8 @@ import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import me.shedaniel.clothconfig2.gui.entries.SelectionListEntry;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 @Config(name = Main.MOD_ID)
 public class ModClothConfig implements ModConfig, ConfigData {
 
@@ -29,6 +31,9 @@ public class ModClothConfig implements ModConfig, ConfigData {
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     public WorldTypes worldTypes = ModConfig.super.worldTypes();
 
+    public List<String> flatLayers = ModConfig.super.flatLayers();
+    public String flatBiome = ModConfig.super.flatBiome();
+    public String singleBiome = ModConfig.super.singleBiome();
     public String seed = ModConfig.super.seed();
     public boolean generateStructures = ModConfig.super.generateStructures();
     public boolean bonusChest = ModConfig.super.bonusChest();
@@ -56,6 +61,21 @@ public class ModClothConfig implements ModConfig, ConfigData {
     @Override
     public WorldTypes worldTypes() {
         return this.worldTypes;
+    }
+
+    @Override
+    public List<String> flatLayers() {
+        return this.flatLayers;
+    }
+
+    @Override
+    public String flatBiome() {
+        return this.flatBiome;
+    }
+
+    @Override
+    public String singleBiome() {
+        return this.singleBiome;
     }
 
     @Override

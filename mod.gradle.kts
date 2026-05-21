@@ -19,6 +19,9 @@ project.extensions.configure<MultiLoader>("multiloader") {
                 string(scp >= "1.21.11" && !isForge, "auto_config") {
                     replace("AutoConfig", "AutoConfigClient")
                 }
+                string(scp >= "1.21.11") {
+                    replace("ResourceLocation", "Identifier")
+                }
             }
         }
     }
