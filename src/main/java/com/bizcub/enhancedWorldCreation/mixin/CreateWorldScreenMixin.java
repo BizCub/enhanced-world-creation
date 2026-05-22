@@ -10,7 +10,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.biome.Biome;
@@ -36,9 +35,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -73,43 +71,44 @@ public class CreateWorldScreenMixin {
 
             var layersInfo = settings.getLayersInfo();
             layersInfo.clear();
-            Main.getConfig().flatLayers().reversed().forEach(flatLayer -> {
-                String layer;
-                int blockCount;
-                if (flatLayer.split("\\*").length >= 2) {
-                    layer = List.of(flatLayer.split("\\*")).get(1);
-                    blockCount = Integer.parseInt(List.of(flatLayer.split("\\*")).get(0));
-                } else {
-                    layer = flatLayer;
-                    blockCount = 1;
-                }
+            List<String> list = new ArrayList<>(Main.getConfig().flatLayers());
+            Collections.reverse(list);
+            list.forEach(flatLayer -> {
+                boolean isHaveStar = flatLayer.split("\\*").length >= 2;
+                List<String> layerSplit = List.of(flatLayer.split("\\*"));
+                int blockCount = isHaveStar ? Integer.parseInt(layerSplit.get(0)) : 1;
+                String layer = isHaveStar ? layerSplit.get(1) : flatLayer;
                 layersInfo.add(new FlatLayerInfo(blockCount, getBlockById(layer)));
             });
 
             uiState.updateDimensions(PresetEditor.flatWorldConfigurator(settings.withBiomeAndLayers(
                     layersInfo,
                     settings.structureOverrides(),
-                    getBiomeById("ocean")
+                    getBiomeById(Main.getConfig().flatBiome())
             )));
         } else {
-            uiState.updateDimensions(PresetEditor.fixedBiomeConfigurator(getBiomeById("meadow")));
+            uiState.updateDimensions(PresetEditor.fixedBiomeConfigurator(getBiomeById(Main.getConfig().singleBiome())));
         }
     }
 
     @Unique
     private Holder<Biome> getBiomeById(String biomeId) {
         RegistryAccess registryAccess = uiState.getSettings().worldgenLoadContext();
-        ResourceKey<Biome> biomeKey = ResourceKey.create(Registries.BIOME, Identifier.withDefaultNamespace(biomeId));
+        ResourceKey<Biome> biomeKey = ResourceKey.create(Registries.BIOME, Main.getDefaultId(biomeId));
+        //~ if >=1.21.2 'registryOrThrow' -> 'lookupOrThrow'
         Registry<Biome> biomes = registryAccess.lookupOrThrow(Registries.BIOME);
+        //~ if >=1.21.2 'getHolderOrThrow' -> 'getOrThrow'
         return biomes.getOrThrow(biomeKey);
     }
 
     @Unique
     private Block getBlockById(String blockId) {
         RegistryAccess registryAccess = uiState.getSettings().worldgenLoadContext();
-        ResourceKey<Block> stoneKey = ResourceKey.create(Registries.BLOCK, Identifier.withDefaultNamespace(blockId));
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Main.getDefaultId(blockId));
+        //~ if >=1.21.2 'registryOrThrow' -> 'lookupOrThrow'
         Registry<Block> blocks = registryAccess.lookupOrThrow(Registries.BLOCK);
-        return blocks.getValue(stoneKey);
+        //~ if >=1.21.2 'get' -> 'getValue'
+        return blocks.getValue(blockKey);
     }
 
     @Inject(method = "createNewWorld", at = @At("HEAD"))

@@ -2,6 +2,7 @@ package com.bizcub.enhancedWorldCreation;
 
 import com.bizcub.enhancedWorldCreation.config.ModConfig;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
+import net.minecraft.resources.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,5 +25,11 @@ public class Main {
 
     public static ModConfig getConfig() {
         return ModConfig.CONFIG;
+    }
+
+    public static Identifier getDefaultId(String id) {
+        return
+                /*? >=1.21 {*/ Identifier.withDefaultNamespace(id);
+                /*?} else*/ //new Identifier(id);
     }
 }

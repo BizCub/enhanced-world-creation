@@ -5,6 +5,9 @@
     "text.autoconfig.enhanced_world_creation.option.allowCommands": "Использование команд",
     "text.autoconfig.enhanced_world_creation.option.worldTypes": "Тип мира",
     "text.autoconfig.enhanced_world_creation.option.seed": "Ключ для генерации мира",
+    "text.autoconfig.enhanced_world_creation.option.flatLayers": "Слои суперплоского мира",
+    "text.autoconfig.enhanced_world_creation.option.flatBiome": "Биом суперплоского мира",
+    "text.autoconfig.enhanced_world_creation.option.singleBiome": "Биом мира с одним биомом",
     "text.autoconfig.enhanced_world_creation.option.generateStructures": "Генерация строений",
     "text.autoconfig.enhanced_world_creation.option.bonusChest": "Бонусный сундук",
 
