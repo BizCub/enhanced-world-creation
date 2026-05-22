@@ -27,7 +27,13 @@ multiloader {
 
         forge.mixinConfigs("${mod.mixin}.mixins.json")
         val awFile = file(ctForgeArchPath)
-        if (awFile.exists()) accessWidenerPath = awFile
+        if (awFile.exists()) {
+            accessWidenerPath = awFile
+            forge {
+                convertAccessWideners.set(true)
+                extraAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
+            }
+        }
 
         decompilers {
             get("vineflower").apply {
@@ -48,6 +54,10 @@ multiloader {
 
     tasks.remapJar {
         injectAccessWidener = true
+    }
+
+    tasks.validateAccessWidener {
+        enabled = false
     }
 
     tasks.named("validateAccessWidener") {

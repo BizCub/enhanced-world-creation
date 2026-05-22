@@ -6,7 +6,7 @@ apply(plugin = "dev.kikugie.fletching-table")
 val stonecutter = project.extensions.getByType(StonecutterBuildExtension::class.java)
 
 project.extensions.configure<MultiLoader>("multiloader") {
-    access()
+    if (!(scp <= "1.20.4" && isForge)) access()
 
     project.afterEvaluate {
         stonecutter.let { sc ->
