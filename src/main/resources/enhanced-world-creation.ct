@@ -1,4 +1,4 @@
-classTweaker v1 official
+classTweaker v1 named
 accessible class net/minecraft/client/gui/screens/worldselection/CreateWorldScreen$GameTab
 accessible method net/minecraft/client/gui/screens/worldselection/CreateWorldScreen$GameTab <init> (Lnet/minecraft/client/gui/screens/worldselection/CreateWorldScreen;)V
 accessible method net/minecraft/client/gui/screens/worldselection/PresetEditor flatWorldConfigurator (Lnet/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings;)Lnet/minecraft/client/gui/screens/worldselection/WorldCreationContext$DimensionsUpdater;

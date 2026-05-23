@@ -1,6 +1,7 @@
 package com.bizcub.enhancedWorldCreation.config;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +9,9 @@ import java.util.List;
 public interface ModConfig {
     ModConfig CONFIG = Compat.isClothConfigLoaded() ? ModClothConfig.getInstance() : new ModConfig() { };
 
+    //~ if >=1.19.3 'new TranslatableComponent' -> 'Component.translatable'
     default String worldName() {
-        return Component.translatable("selectWorld.newWorld").getString();
+        return new TranslatableComponent("selectWorld.newWorld").getString();
     }
 
     default ModClothConfig.GameModes gameModes() {

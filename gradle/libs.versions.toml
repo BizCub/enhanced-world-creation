@@ -1,5 +1,5 @@
 [versions]
-stonecutter = "0.9+"
+stonecutter = "0.9.5-test.1"
 multiloader = "0.0.4"
 publish = "1.1.0"
 loom = "1.15-SNAPSHOT"

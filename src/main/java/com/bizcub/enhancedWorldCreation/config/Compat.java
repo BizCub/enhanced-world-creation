@@ -1,7 +1,7 @@
 package com.bizcub.enhancedWorldCreation.config;
 
 //~ auto_config
-import me.shedaniel.autoconfig.AutoConfigClient;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.gui.screens.Screen;
 /*? fabric*/ import net.fabricmc.loader.api.FabricLoader;
 /*? forge*/ //import net.minecraftforge.fml.ModList;
@@ -9,9 +9,9 @@ import net.minecraft.client.gui.screens.Screen;
 
 public class Compat {
     public static final String clothConfigId =
-            /*? (fabric && >=1.18) || (forge && <1.17)*/ "cloth-config";
+            /*? (fabric && >=1.18) || (forge && <1.17)*/ //"cloth-config";
             /*? (forge && >=1.17) || neoforge*/ //"cloth_config";
-            /*? fabric && <1.18*/ //"cloth-config2";
+            /*? fabric && <1.18*/ "cloth-config2";
 
     public static boolean isModLoaded(String modId) {
         /*? fabric*/ return FabricLoader.getInstance().isModLoaded(modId);
@@ -25,6 +25,6 @@ public class Compat {
 
     //? is_cloth_config_available {
     public static Screen getScreen(Screen parent) {
-        return AutoConfigClient.getConfigScreen(ModClothConfig.class, parent).get();
+        return AutoConfig.getConfigScreen(ModClothConfig.class, parent).get();
     }//?}
 }

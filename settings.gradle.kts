@@ -12,7 +12,7 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.9+"
+    id("dev.kikugie.stonecutter") version "0.9.5-test.1"
 }
 
 rootProject.name = extra["mod.name"] as String
@@ -28,4 +28,5 @@ stonecutter.create(rootProject) {
     match("1.21.1", fb, fr, nf)
     match("1.20.2", fb, fr)
     match("1.20.1", fb, fr)
+    match("1.16.5", fb)
 }

@@ -1,6 +1,7 @@
 package com.bizcub.enhancedWorldCreation.mixin;
 
-import com.bizcub.enhancedWorldCreation.Main;
+//? >=1.19.3 {
+/*import com.bizcub.enhancedWorldCreation.Main;
 import com.bizcub.enhancedWorldCreation.config.Compat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
@@ -59,7 +60,7 @@ public class CreateWorldScreenMixin {
         uiState.setGameMode(Main.GAME_MODES.get(Main.getConfig().gameModes().getName()));
         uiState.setDifficulty(Difficulty.byName(Main.getConfig().difficulties().getName()));
         //~ if >=1.21 'setAllowCheats' -> 'setAllowCommands'
-        uiState.setAllowCommands(Main.getConfig().allowCommands());
+        uiState.setAllowCheats(Main.getConfig().allowCommands());
 
         uiState.setWorldType(worldPresets.get(Main.getConfig().worldTypes().getKey()));
         uiState.setSeed(Main.getConfig().seed());
@@ -96,9 +97,9 @@ public class CreateWorldScreenMixin {
         RegistryAccess registryAccess = uiState.getSettings().worldgenLoadContext();
         ResourceKey<Biome> biomeKey = ResourceKey.create(Registries.BIOME, Main.getDefaultId(biomeId));
         //~ if >=1.21.2 'registryOrThrow' -> 'lookupOrThrow'
-        Registry<Biome> biomes = registryAccess.lookupOrThrow(Registries.BIOME);
+        Registry<Biome> biomes = registryAccess.registryOrThrow(Registries.BIOME);
         //~ if >=1.21.2 'getHolderOrThrow' -> 'getOrThrow'
-        return biomes.getOrThrow(biomeKey);
+        return biomes.getHolderOrThrow(biomeKey);
     }
 
     @Unique
@@ -106,18 +107,18 @@ public class CreateWorldScreenMixin {
         RegistryAccess registryAccess = uiState.getSettings().worldgenLoadContext();
         ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Main.getDefaultId(blockId));
         //~ if >=1.21.2 'registryOrThrow' -> 'lookupOrThrow'
-        Registry<Block> blocks = registryAccess.lookupOrThrow(Registries.BLOCK);
+        Registry<Block> blocks = registryAccess.registryOrThrow(Registries.BLOCK);
         //~ if >=1.21.2 'get' -> 'getValue'
-        return blocks.getValue(blockKey);
+        return blocks.get(blockKey);
     }
 
     @Inject(method = "createNewWorld", at = @At("HEAD"))
-    private void createRPFolder(/*? >=1.21.2 {*/ CallbackInfoReturnable<Boolean> cir /*?} else {*/ /*CallbackInfo ci *//*?}*/) {
+    private void createRPFolder(/^? >=1.21.2 {^/ /^CallbackInfoReturnable<Boolean> cir ^//^?} else {^/ CallbackInfo ci /^?}^/) {
         new File(pathToSavesFolder + uiState.getTargetFolder() + "/resourcepacks").mkdirs();
     }
 
     @Inject(method = "createNewWorld", at = @At("TAIL"))
-    private void copyResources(/*? >=1.21.2 {*/ CallbackInfoReturnable<Boolean> cir /*?} else {*/ /*CallbackInfo ci *//*?}*/) throws IOException {
+    private void copyResources(/^? >=1.21.2 {^/ /^CallbackInfoReturnable<Boolean> cir ^//^?} else {^/ CallbackInfo ci /^?}^/) throws IOException {
         String pathToWorld = pathToSavesFolder;
 
         if (!Main.iconPath.isEmpty()) {
@@ -184,3 +185,67 @@ public class CreateWorldScreenMixin {
         }
     }
 }
+
+*///?} else {
+import com.bizcub.enhancedWorldCreation.Main;
+import com.bizcub.enhancedWorldCreation.gui.ExtraScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
+import net.minecraft.client.gui.screens.worldselection.WorldGenSettingsComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.storage.LevelResource;
+import org.apache.commons.io.FileUtils;
+import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+@Mixin(CreateWorldScreen.class)
+public abstract class CreateWorldScreenMixin extends Screen {
+
+    @Shadow @Mutable @Final public WorldGenSettingsComponent worldGenSettingsComponent;
+    @Shadow private boolean commands;
+    @Unique String pathToSavesFolder = Minecraft.getInstance().gameDirectory.getAbsolutePath() + "/saves/";
+
+    @Unique private Button button;
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void screenInit1(CallbackInfo ci) {
+        this.commands = true;
+    }
+
+    protected CreateWorldScreenMixin(Component component) {
+        super(component);
+    }
+
+    @Inject(method = "init", at = @At("HEAD"))
+    private void screenInit(CallbackInfo info) {
+        this.button = this.addButton(
+                new Button(
+                this.width / 2 + 5, 151, 150, 20,
+                new TranslatableComponent("enhanced_world_creation.extra.button"),
+                (button) -> Minecraft.getInstance().setScreen(new ExtraScreen(Minecraft.getInstance().screen))
+        ));
+    }
+
+    @Inject(method = "setDisplayOptions", at = @At("TAIL"))
+    private void screenSetDisplayOptions(boolean bl, CallbackInfo ci) {
+        if (this.button != null) this.button.visible = bl;
+    }
+}//?}
