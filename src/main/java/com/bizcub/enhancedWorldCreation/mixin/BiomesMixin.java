@@ -14,6 +14,6 @@ public class BiomesMixin {
 
     @Inject(method = "register", at = @At("RETURN"))
     private static void getBiomesMap(int i, ResourceKey<Biome> resourceKey, Biome biome, CallbackInfoReturnable<Biome> cir) {
-        Main.BIOMES.put(resourceKey.toString().split(":")[2].split("]")[0], i);
+        Main.BIOMES.put(resourceKey.toString().split(":")[2].split("]")[0], resourceKey);
     }
 }

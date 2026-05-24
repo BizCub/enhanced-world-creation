@@ -188,6 +188,7 @@ public class CreateWorldScreenMixin {
 
 *///?} else {
 import com.bizcub.enhancedWorldCreation.Main;
+import com.bizcub.enhancedWorldCreation.Utils;
 import com.bizcub.enhancedWorldCreation.config.Compat;
 import com.bizcub.enhancedWorldCreation.gui.ExtraScreen;
 import net.minecraft.client.Minecraft;
@@ -198,28 +199,22 @@ import net.minecraft.client.gui.screens.worldselection.WorldGenSettingsComponent
 import net.minecraft.client.gui.screens.worldselection.WorldPreset;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.data.worldgen.biome.Biomes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.FixedBiomeSource;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.FlatLevelSource;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
-import net.minecraft.world.level.levelgen.WorldGenSettings;
-import net.minecraft.world.level.levelgen.flat.FlatLayerInfo;
 import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
-import java.util.List;
 
 @Mixin(CreateWorldScreen.class)
 public abstract class CreateWorldScreenMixin extends Screen {
@@ -228,10 +223,11 @@ public abstract class CreateWorldScreenMixin extends Screen {
     @Shadow private String initName;
     @Shadow private boolean commands;
     @Shadow private boolean commandsChanged;
-
     @Shadow private Difficulty selectedDifficulty;
     @Shadow private Difficulty effectiveDifficulty;
     @Shadow private CreateWorldScreen.SelectedGameMode gameMode;
+    @Shadow private String resultFolder;
+
     @Unique String pathToSavesFolder = Minecraft.getInstance().gameDirectory.getAbsolutePath() + "/saves/";
     @Unique private Button button;
 
@@ -240,8 +236,11 @@ public abstract class CreateWorldScreenMixin extends Screen {
     }
 
     @Inject(method = "<init>*", at = @At("TAIL"))
-    private void screenInit1(CallbackInfo ci) {
+    private void screenInit(CallbackInfo ci) {
         if (!Compat.isClothConfigLoaded()) return;
+
+        WorldGenSettingsComponent currentSettings = this.worldGenSettingsComponent;
+        RegistryAccess.RegistryHolder registryHolder = currentSettings.registryHolder();
 
         Map<String, WorldPreset> worldPresets = new HashMap<>();
         WorldPreset.PRESETS.forEach(preset ->
@@ -257,67 +256,60 @@ public abstract class CreateWorldScreenMixin extends Screen {
         }
 
         if (!Main.getConfig().seed().isEmpty())
-            this.worldGenSettingsComponent.seed = OptionalLong.of(Long.parseLong(Main.getConfig().seed()));
-        this.worldGenSettingsComponent.preset = Optional.of(worldPresets.get(Main.getConfig().worldTypes().getKey()));
-        this.worldGenSettingsComponent.settings = worldPresets.get(Main.getConfig().worldTypes().getKey()).create(
-                this.worldGenSettingsComponent.registryHolder(),
-                this.worldGenSettingsComponent.settings.seed(),
-                this.worldGenSettingsComponent.settings.generateFeatures(),
-                this.worldGenSettingsComponent.settings.generateBonusChest()
+            currentSettings.seed = OptionalLong.of(Long.parseLong(Main.getConfig().seed()));
+        currentSettings.preset = Optional.of(worldPresets.get(Main.getConfig().worldTypes().getKey()));
+        currentSettings.settings = worldPresets.get(Main.getConfig().worldTypes().getKey()).create(
+                currentSettings.registryHolder(),
+                currentSettings.settings.seed(),
+                currentSettings.settings.generateFeatures(),
+                currentSettings.settings.generateBonusChest()
         );
         if (!Main.getConfig().generateStructures())
-            this.worldGenSettingsComponent.settings = this.worldGenSettingsComponent.settings.withFeaturesToggled();
+            currentSettings.settings = currentSettings.settings.withFeaturesToggled();
         if (Main.getConfig().bonusChest())
-            this.worldGenSettingsComponent.settings = this.worldGenSettingsComponent.settings.withBonusChestToggled();
+            currentSettings.settings = currentSettings.settings.withBonusChestToggled();
 
-        WorldGenSettings currentSettings = this.worldGenSettingsComponent.settings;
-        ChunkGenerator currentGenerator = currentSettings.overworld();
+        if (currentSettings.settings.overworld() instanceof FlatLevelSource) {
+            FlatLevelGeneratorSettings flatSettings = ((FlatLevelSource) currentSettings.settings.overworld()).settings();
+            flatSettings = flatSettings.withLayers(Utils.getFlatLayers(), flatSettings.structureSettings());
+            flatSettings.setBiome(() -> Utils.getBiomeById(Main.getConfig().flatBiome(), registryHolder));
+            currentSettings.settings =
+                    Utils.getSettings(new FlatLevelSource(flatSettings), currentSettings.settings, registryHolder);
+        }
 
-        if (currentGenerator instanceof FlatLevelSource) {
-            List<FlatLayerInfo> layers = new ArrayList<>();
-            layers.add(new FlatLayerInfo(1, Blocks.BEDROCK));
-            layers.add(new FlatLayerInfo(25, Blocks.STONE));
-            layers.add(new FlatLayerInfo(2, Blocks.DIRT));
-            layers.add(new FlatLayerInfo(1, Blocks.GRASS_BLOCK));
-
-            FlatLevelSource flatSource = (FlatLevelSource) currentGenerator;
-            FlatLevelGeneratorSettings flatSettings = flatSource.settings();
-            FlatLevelGeneratorSettings newSettings = flatSettings.withLayers(layers, flatSettings.structureSettings());
-            System.out.println("currentGenerator instanceof FlatLevelSource");
-            setSettings(new FlatLevelSource(newSettings));
-        } else {
-            RegistryAccess.RegistryHolder registryHolder = this.worldGenSettingsComponent.registryHolder();
-            Registry<Biome> biomeRegistry = registryHolder.registryOrThrow(Registry.BIOME_REGISTRY);
-            Registry<NoiseGeneratorSettings> noiseSettingsRegistry = registryHolder.registryOrThrow(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY);
-            setSettings(new NoiseBasedChunkGenerator(
-                    new FixedBiomeSource(biomeRegistry.getOrThrow(Biomes.byId(Main.BIOMES.get(Main.getConfig().singleBiome())))),
-                    currentSettings.seed(),
-                    () -> noiseSettingsRegistry.getOrThrow(NoiseGeneratorSettings.OVERWORLD)
-            ));
+        ResourceKey<NoiseGeneratorSettings> noiseGeneratorSettings = NoiseGeneratorSettings.OVERWORLD;
+        switch (Main.getConfig().worldTypes()) {
+            case SINGLE_BIOME_CAVES:
+                noiseGeneratorSettings = NoiseGeneratorSettings.CAVES;
+                break;
+            case SINGLE_BIOME_FLOATING_ISLANDS:
+                noiseGeneratorSettings = NoiseGeneratorSettings.FLOATING_ISLANDS;
+                break;
+        }
+        switch (Main.getConfig().worldTypes()) {
+            case SINGLE_BIOME:
+            case SINGLE_BIOME_CAVES:
+            case SINGLE_BIOME_FLOATING_ISLANDS:
+                Registry<NoiseGeneratorSettings> noiseSettingsRegistry = registryHolder.registryOrThrow(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY);
+                ResourceKey<NoiseGeneratorSettings> finalNoiseGeneratorSettings = noiseGeneratorSettings;
+                currentSettings.settings = Utils.getSettings(
+                        new NoiseBasedChunkGenerator(
+                                new FixedBiomeSource(Utils.getBiomeById(Main.getConfig().singleBiome(), registryHolder)),
+                                currentSettings.settings.seed(),
+                                () -> noiseSettingsRegistry.getOrThrow(finalNoiseGeneratorSettings)
+                        ),
+                        currentSettings.settings,
+                        registryHolder
+                );
+                break;
         }
     }
 
-    @Unique
-    private <T extends ChunkGenerator> void setSettings(T value) {
-        WorldGenSettings currentSettings = this.worldGenSettingsComponent.settings;
-        RegistryAccess.RegistryHolder registryHolder = this.worldGenSettingsComponent.registryHolder();
-        this.worldGenSettingsComponent.settings = new WorldGenSettings(
-                currentSettings.seed(),
-                currentSettings.generateFeatures(),
-                currentSettings.generateBonusChest(),
-                WorldGenSettings.withOverworld(
-                        registryHolder.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY),
-                        currentSettings.dimensions(), value
-                )
-        );
-    }
-
     @Inject(method = "init", at = @At("HEAD"))
-    private void screenInit(CallbackInfo info) {
-        this.button = this.addButton(
-                new Button(
+    private void addExtraButton(CallbackInfo info) {
+        this.button = this.addButton(Utils.getButton(
                 this.width / 2 + 5, 151, 150, 20,
-                new TranslatableComponent("enhanced_world_creation.extra.button"),
+                Utils.getComponent("enhanced_world_creation.extra.button", Utils.ComponentTypes.TRANSLATABLE),
                 (button) -> Minecraft.getInstance().setScreen(new ExtraScreen(Minecraft.getInstance().screen))
         ));
     }
@@ -325,5 +317,15 @@ public abstract class CreateWorldScreenMixin extends Screen {
     @Inject(method = "setDisplayOptions", at = @At("TAIL"))
     private void screenSetDisplayOptions(boolean bl, CallbackInfo ci) {
         if (this.button != null) this.button.visible = bl;
+    }
+
+    @Inject(method = "onCreate", at = @At("HEAD"))
+    private void createRPFolder(CallbackInfo ci) {
+        new File(pathToSavesFolder + resultFolder).mkdirs();
+    }
+
+    @Inject(method = "onCreate", at = @At("TAIL"))
+    private void copyResources(CallbackInfo ci) throws IOException {
+        Utils.copyResources(pathToSavesFolder, resultFolder);
     }
 }//?}

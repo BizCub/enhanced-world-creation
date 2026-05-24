@@ -99,13 +99,11 @@ public class ExtraScreen extends Screen {
 
 *///?} else {
 import com.bizcub.enhancedWorldCreation.Main;
+import com.bizcub.enhancedWorldCreation.Utils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -118,7 +116,7 @@ public class ExtraScreen extends Screen {
     private MultiLineLabel tip;
 
     public ExtraScreen(Screen parent) {
-        super(Component.nullToEmpty(""));
+        super(Utils.getComponent());
         this.parent = parent;
     }
 
@@ -126,22 +124,26 @@ public class ExtraScreen extends Screen {
     protected void init() {
         Padding padding = new Padding(25, this.height / 2 - 90);
 
-        this.iconPathBox = addWidget(new EditBox(this.font, this.width / 2 - 75, padding.getY(2), 150, 20, new TranslatableComponent("")));
+        this.iconPathBox = addWidget(new EditBox(this.font, this.width / 2 - 75, padding.getY(2), 150, 20, Utils.getComponent()));
         this.iconPathBox.setValue(Main.iconPath);
         this.iconPathBox.setMaxLength(1000);
 
-        this.resourcePackPathBox = addWidget(new EditBox(this.font, this.width / 2 - 75, padding.getY(4), 150, 20, new TranslatableComponent("")));
+        this.resourcePackPathBox = addWidget(new EditBox(this.font, this.width / 2 - 75, padding.getY(4), 150, 20, Utils.getComponent()));
         this.resourcePackPathBox.setValue(Main.resourcePackPath);
         this.resourcePackPathBox.setMaxLength(1000);
 
-        this.tip = MultiLineLabel.create(this.font,
-                new TranslatableComponent(this.resourcePackPathBox.getValue().isEmpty()
-                        ? "enhanced_world_creation.extra.on_files_drop"
-                        : "enhanced_world_creation.extra.rp.warning"),
+        this.tip = MultiLineLabel.create(
+                this.font,
+                Utils.getComponent(
+                        this.resourcePackPathBox.getValue().isEmpty()
+                                ? "enhanced_world_creation.extra.on_files_drop"
+                                : "enhanced_world_creation.extra.rp.warning",
+                        Utils.ComponentTypes.TRANSLATABLE
+                ),
                 this.width / 2 - 50, padding.getY(6)
         );
 
-        this.addButton(new Button(this.width / 2 - 75, this.height - 28, 150, 20, CommonComponents.GUI_DONE, (button) -> onClose()));
+        this.addButton(Utils.getButton(this.width / 2 - 75, this.height - 28, 150, 20, CommonComponents.GUI_DONE, (button) -> onClose()));
     }
 
     @Override
@@ -151,8 +153,8 @@ public class ExtraScreen extends Screen {
 
         this.iconPathBox.render(poseStack, i, j, f);
         this.resourcePackPathBox.render(poseStack, i, j, f);
-        drawCenteredString(poseStack, this.font, new TranslatableComponent("enhanced_world_creation.extra.icon"), this.width / 2, padding.getY(1) + 5, 16777215);
-        drawCenteredString(poseStack, this.font, new TranslatableComponent("enhanced_world_creation.extra.rp"), this.width / 2, padding.getY(3) + 5, 16777215);
+        drawCenteredString(poseStack, this.font, Utils.getComponent("enhanced_world_creation.extra.icon", Utils.ComponentTypes.TRANSLATABLE), this.width / 2, padding.getY(1) + 5, 16777215);
+        drawCenteredString(poseStack, this.font, Utils.getComponent("enhanced_world_creation.extra.rp", Utils.ComponentTypes.TRANSLATABLE), this.width / 2, padding.getY(3) + 5, 16777215);
 
         this.tip.renderCentered(poseStack, this.width / 2, padding.getY(6));
         super.render(poseStack, i, j, f);
@@ -182,7 +184,11 @@ public class ExtraScreen extends Screen {
     }
 
     private void addResourcePack(String value) {
-        this.tip = MultiLineLabel.create(this.font, new TranslatableComponent("enhanced_world_creation.extra.rp.warning"), this.width / 2 - 50, new Padding(25, this.height / 2 - 90).getY(6));
+        this.tip = MultiLineLabel.create(
+                this.font,
+                Utils.getComponent("enhanced_world_creation.extra.rp.warning", Utils.ComponentTypes.TRANSLATABLE),
+                this.width / 2 - 50, new Padding(25, this.height / 2 - 90).getY(6)
+        );
         this.resourcePackPathBox.setValue(value);
     }
 

@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public class GameTabMixin {
 
     @ModifyVariable(method = "<init>", at = @At("TAIL"), ordinal = 0)
-    private GridLayout.RowHelper screenInit(GridLayout.RowHelper helper) {
+    private GridLayout.RowHelper addExtraButton(GridLayout.RowHelper helper) {
         Main.iconPath = "";
         Main.resourcePackPath = "";
 

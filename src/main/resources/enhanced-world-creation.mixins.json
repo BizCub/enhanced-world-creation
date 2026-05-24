@@ -5,7 +5,8 @@
         "defaultRequire": 1
     },
     "mixins": [
-        "BiomesMixin"
+        "BiomesMixin",
+        "BlocksMixin"
     ],
     "client": [
         "CreateWorldScreenMixin",

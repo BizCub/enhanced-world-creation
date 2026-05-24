@@ -8,6 +8,6 @@ accessible method net/minecraft/client/gui/screens/worldselection/PresetEditor f
 accessible class net/minecraft/client/gui/screens/worldselection/CreateWorldScreen$SelectedGameMode
 accessible field net/minecraft/client/gui/screens/worldselection/WorldGenSettingsComponent settings Lnet/minecraft/world/level/levelgen/WorldGenSettings;
 accessible field net/minecraft/client/gui/screens/worldselection/WorldGenSettingsComponent preset Ljava/util/Optional;
-accessible field net/minecraft/client/gui/screens/worldselection/WorldPreset PRESETS Ljava/util/List;
 accessible field net/minecraft/client/gui/screens/worldselection/WorldGenSettingsComponent seed Ljava/util/OptionalLong;
+accessible field net/minecraft/client/gui/screens/worldselection/WorldPreset PRESETS Ljava/util/List;
 #?}
