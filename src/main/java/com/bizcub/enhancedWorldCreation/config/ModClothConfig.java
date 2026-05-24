@@ -142,17 +142,20 @@ public class ModClothConfig implements ModConfig, ConfigData {
     }
 
     public enum WorldTypes implements SelectionListEntry.Translatable {
-        DEFAULT("normal"),
+//        DEFAULT("normal"),
+        DEFAULT("default"),
         SUPERFLAT("flat"),
         AMPLIFIED("amplified"),
         DEBUG("debug_all_block_states"),
         LARGE_BIOMES("large_biomes"),
-        SINGLE_BIOME("single_biome_surface");
+        SINGLE_BIOME("single_biome_surface"),
+        SINGLE_BIOME_CAVES("single_biome_caves"),
+        SINGLE_BIOME_FLOATING_ISLANDS("single_biome_floating_islands");
 
         private final String translate;
 
         WorldTypes(String key) {
-            this.translate = "generator.minecraft." + key;
+            this.translate = "generator." + key;
         }
 
         @Override

@@ -124,8 +124,6 @@ public class ExtraScreen extends Screen {
 
     @Override
     protected void init() {
-        System.out.println(Main.iconPath);
-        System.out.println(Main.resourcePackPath);
         Padding padding = new Padding(25, this.height / 2 - 90);
 
         this.iconPathBox = addWidget(new EditBox(this.font, this.width / 2 - 75, padding.getY(2), 150, 20, new TranslatableComponent("")));
