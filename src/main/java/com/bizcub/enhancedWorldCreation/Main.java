@@ -1,7 +1,7 @@
 package com.bizcub.enhancedWorldCreation;
 
 import com.bizcub.enhancedWorldCreation.config.ModConfig;
-//import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
+/*? >=1.19.3*/ import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class Main {
     public static final String MOD_ID = /*$ mod_id*/ "enhanced_world_creation";
-    public static final Map<String, CreateWorldScreen.SelectedGameMode> GAME_MODES = new HashMap<>();
+    public static final Map<String, WorldCreationUiState.SelectedGameMode> GAME_MODES = new HashMap<>();
     public static final Map<String, ResourceKey<Biome>> BIOMES = new HashMap<>();
     public static final Map<String, Block> BLOCKS = new HashMap<>();
 
@@ -22,11 +22,10 @@ public class Main {
     public static void init() {
         getConfig();
 
-        //WorldCreationUiState.SelectedGameMode
-        GAME_MODES.put("survival", CreateWorldScreen.SelectedGameMode.SURVIVAL);
-        GAME_MODES.put("hardcore", CreateWorldScreen.SelectedGameMode.HARDCORE);
-        GAME_MODES.put("creative", CreateWorldScreen.SelectedGameMode.CREATIVE);
-        GAME_MODES.put("spectator", CreateWorldScreen.SelectedGameMode.DEBUG);
+        GAME_MODES.put("survival", WorldCreationUiState.SelectedGameMode.SURVIVAL);
+        GAME_MODES.put("hardcore", WorldCreationUiState.SelectedGameMode.HARDCORE);
+        GAME_MODES.put("creative", WorldCreationUiState.SelectedGameMode.CREATIVE);
+        GAME_MODES.put("spectator", WorldCreationUiState.SelectedGameMode.DEBUG);
     }
 
     public static ModConfig getConfig() {

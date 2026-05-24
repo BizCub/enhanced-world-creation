@@ -1,9 +1,11 @@
 package com.bizcub.enhancedWorldCreation.mixin;
 
-import com.bizcub.enhancedWorldCreation.Main;
+import org.spongepowered.asm.mixin.Mixin;
+
+//? <1.19.4 {
+/*import com.bizcub.enhancedWorldCreation.Main;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -16,3 +18,9 @@ public class BlocksMixin {
         Main.BLOCKS.put(string, block);
     }
 }
+
+*///?} else {
+@Mixin(value = {})
+class BlocksMixin {
+
+}//?}

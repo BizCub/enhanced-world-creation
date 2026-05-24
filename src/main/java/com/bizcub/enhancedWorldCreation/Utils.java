@@ -4,9 +4,14 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
+//? >=1.19.4 {
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;//?}
+/*? <1.19.4 {*/
+/*import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;*///?}
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -39,48 +44,75 @@ public class Utils {
     }
 
     public static Component getComponent(String text, Utils.ComponentTypes type) {
-        switch (type) {
+        //? >=1.19.4 {
+        return switch (type) {
+            case EMPTY -> Component.empty();
+            case TRANSLATABLE -> Component.translatable(text);
+            default -> Component.literal(text);
+        };
+        //?} else {
+        /*switch (type) {
             case EMPTY:
                 return new TextComponent("");
             case TRANSLATABLE:
                 return new TranslatableComponent(text);
             default:
                 return new TextComponent(text);
-        }
+        }*///?}
     }
 
-    public static ResourceLocation getDefaultId(String id) {
-        /*? >=1.21 {*/ /*return ResourceLocation.withDefaultNamespace(id);
-         *//*?} else*/ return new ResourceLocation(id);
+    public static Identifier getDefaultId(String id) {
+        /*? >=1.21 {*/ return Identifier.withDefaultNamespace(id);
+         /*?} else*/ //return new Identifier(id);
     }
 
     public static Button getButton(int x, int y, int width, int height, Component component, Button.OnPress onPress) {
-        return new Button(x, y, width, height, component, onPress);
+        /*? >=1.19.3 {*/ return Button.builder(component, onPress).pos(x, y).size(width, height).build();
+        /*?} else*/ //return new Button(x, y, width, height, component, onPress);
     }
 
-    public static Biome getBiomeById(String biomeId, RegistryAccess.RegistryHolder registryHolder) {
+    //? >=1.19.4 {
+    public static Holder<Biome> getBiomeById(String biomeId, RegistryAccess registryAccess) {
+        ResourceKey<Biome> biomeKey = ResourceKey.create(Registries.BIOME, Utils.getDefaultId(biomeId));
+        //~ if >=1.21.2 'registryOrThrow' -> 'lookupOrThrow'
+        Registry<Biome> biomes = registryAccess.lookupOrThrow(Registries.BIOME);
+        //~ if >=1.21.2 'getHolderOrThrow' -> 'getOrThrow'
+        return biomes.getOrThrow(biomeKey);
+    }
+
+    public static Block getBlockById(String blockId, RegistryAccess registryAccess) {
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Utils.getDefaultId(blockId));
+        //~ if >=1.21.2 'registryOrThrow' -> 'lookupOrThrow'
+        Registry<Block> blocks = registryAccess.lookupOrThrow(Registries.BLOCK);
+        //~ if >=1.21.2 'get' -> 'getValue'
+        return blocks.getValue(blockKey);
+    }
+
+    //?} else {
+    /*public static Biome getBiomeById(String biomeId, RegistryAccess.RegistryHolder registryHolder) {
         Registry<Biome> biomeRegistry = registryHolder.registryOrThrow(Registry.BIOME_REGISTRY);
         return biomeRegistry.getOrThrow(Main.BIOMES.get(biomeId));
     }
 
     public static Block getBlockById(String blockId) {
         return Main.BLOCKS.get(blockId);
-    }
+    }*///?}
 
-    public static List<FlatLayerInfo> getFlatLayers() {
+    public static List<FlatLayerInfo> getFlatLayers(/*? >=1.19.4 >> ')'*/ RegistryAccess registryAccess) {
         List<FlatLayerInfo> layers = new ArrayList<>();
         Main.getConfig().flatLayers().forEach(flatLayer -> {
             boolean isHaveStar = flatLayer.split("\\*").length >= 2;
             List<String> layerSplit = Arrays.asList(flatLayer.split("\\*"));
             int blockCount = isHaveStar ? Integer.parseInt(layerSplit.get(0)) : 1;
             String layer = isHaveStar ? layerSplit.get(1) : flatLayer;
-            layers.add(new FlatLayerInfo(blockCount, getBlockById(layer)));
+            layers.add(new FlatLayerInfo(blockCount, getBlockById(layer /*? >=1.19.4 >> ')'*/, registryAccess)));
         });
         Collections.reverse(layers);
         return layers;
     }
 
-    public static <T extends ChunkGenerator> WorldGenSettings getSettings(T value, WorldGenSettings currentSettings, RegistryAccess.RegistryHolder registryHolder) {
+    //? <1.19.4 {
+    /*public static <T extends ChunkGenerator> WorldGenSettings getSettings(T value, WorldGenSettings currentSettings, RegistryAccess.RegistryHolder registryHolder) {
         return new WorldGenSettings(
                 currentSettings.seed(),
                 currentSettings.generateFeatures(),
@@ -91,7 +123,7 @@ public class Utils {
                         value
                 )
         );
-    }
+    }*///?}
 
     public static void copyResources(String pathToWorld, String worldName) throws IOException {
         if (!Main.iconPath.isEmpty()) {
