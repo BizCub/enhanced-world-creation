@@ -2,7 +2,10 @@ package com.bizcub.enhancedWorldCreation.gui;
 
 //? >=1.19.3 {
 import com.bizcub.enhancedWorldCreation.Main;
+//? >=1.20 {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+//?} else
+//import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.GridLayout;
@@ -59,7 +62,7 @@ public class ExtraScreen extends Screen {
     }
 
     @Override //~ if >=26.1 'render(' -> 'extractRenderState(' {
-    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int i, int j, float f) {
+    public void extractRenderState(/*? >=1.20 {*/ GuiGraphicsExtractor /*?} else {*/ /*PoseStack *//*?}*/ guiGraphics, int i, int j, float f) {
         //? <1.20.5
         //this.renderBackground(guiGraphics /*? >=1.20.2 {*/, i, j, f/*?}*/);
         super.extractRenderState(guiGraphics, i, j, f);//~}

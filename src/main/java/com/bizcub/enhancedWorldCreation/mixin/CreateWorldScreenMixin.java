@@ -139,7 +139,6 @@ public abstract class CreateWorldScreenMixin extends Screen {
         if (!Compat.isClothConfigLoaded()) return;
 
         WorldGenSettingsComponent currentSettings = this.worldGenSettingsComponent;
-//        WorldCreationContext currentContext = currentSettings.settings /^? >=1.19 >> ';'^/();
         /^? >=1.18.2 {^/ RegistryAccess registryAccess = currentSettings.registryHolder();
         /^?} else^/ //RegistryAccess.RegistryHolder registryAccess = currentSettings.registryHolder();
 
