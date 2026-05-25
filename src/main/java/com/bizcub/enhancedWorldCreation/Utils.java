@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceKey;//?}
 import net.minecraft.network.chat.TranslatableComponent;*///?}
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -77,8 +78,12 @@ public class Utils {
         ResourceKey<Biome> biomeKey = ResourceKey.create(Registries.BIOME, Utils.getDefaultId(biomeId));
         //~ if >=1.21.2 'registryOrThrow' -> 'lookupOrThrow'
         Registry<Biome> biomes = registryAccess.lookupOrThrow(Registries.BIOME);
-        //~ if >=1.21.2 'getHolderOrThrow' -> 'getOrThrow'
-        return biomes.getOrThrow(biomeKey);
+        //~ if >=1.21.2 'getHolderOrThrow' -> 'getOrThrow' {
+        //~ if >=1.21.2 'get' -> 'getValue'
+        Biome biome = biomes.getValue(biomeKey);
+        return biome != null
+                ? biomes.getOrThrow(biomeKey)
+                : biomes.getOrThrow(Biomes.PLAINS);//~}
     }
 
     public static Block getBlockById(String blockId, RegistryAccess registryAccess) {
@@ -92,8 +97,11 @@ public class Utils {
     //?} else {
     /*public static /^? <1.18.2 {^/ /^Biome ^//^?} else {^/ Holder<Biome>  /^?}^/ getBiomeById(String biomeId, RegistryAccess /^? <1.18.2 {^/ /^.RegistryHolder ^//^?}^/ registryAccess) {
         Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registry.BIOME_REGISTRY);
-        //~ if >=1.18.2 'getOrThrow' -> 'getHolderOrThrow'
-        return biomeRegistry.getHolderOrThrow(Main.BIOMES.get(biomeId));
+        //~ if >=1.18.2 'getOrThrow' -> 'getHolderOrThrow' {
+        Biome biome = biomeRegistry.get(Main.BIOMES.get(biomeId));
+        return biome != null
+                ? biomeRegistry.getHolderOrThrow(Main.BIOMES.get(biomeId))
+                : biomeRegistry.getHolderOrThrow(Biomes.PLAINS);//~}
     }
 
     public static Block getBlockById(String blockId) {
@@ -107,7 +115,9 @@ public class Utils {
             List<String> layerSplit = Arrays.asList(flatLayer.split("\\*"));
             int blockCount = isHaveStar ? Integer.parseInt(layerSplit.get(0)) : 1;
             String layer = isHaveStar ? layerSplit.get(1) : flatLayer;
-            layers.add(new FlatLayerInfo(blockCount, getBlockById(layer /*? >=1.19.4 >> ')'*/, registryAccess)));
+            Block block = getBlockById(layer /*? >=1.19.4 >> ')'*/, registryAccess);
+            if (block != null)
+                layers.add(new FlatLayerInfo(blockCount, block));
         });
         Collections.reverse(layers);
         return layers;
