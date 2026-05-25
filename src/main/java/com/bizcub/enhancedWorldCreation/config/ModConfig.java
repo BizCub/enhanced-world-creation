@@ -1,6 +1,6 @@
 package com.bizcub.enhancedWorldCreation.config;
 
-import net.minecraft.network.chat.Component;
+import com.bizcub.enhancedWorldCreation.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ public interface ModConfig {
     ModConfig CONFIG = Compat.isClothConfigLoaded() ? ModClothConfig.getInstance() : new ModConfig() { };
 
     default String worldName() {
-        return Component.translatable("selectWorld.newWorld").getString();
+        return Utils.getComponent("selectWorld.newWorld", Utils.ComponentTypes.TRANSLATABLE).getString();
     }
 
     default ModClothConfig.GameModes gameModes() {

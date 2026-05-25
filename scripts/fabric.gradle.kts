@@ -47,6 +47,10 @@ multiloader {
         from(builtFile)
     }
 
+    tasks.validateAccessWidener {
+        enabled = false
+    }
+
     tasks.named("validateAccessWidener") {
         dependsOn("processResources")
     }

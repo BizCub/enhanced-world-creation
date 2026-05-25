@@ -22,6 +22,9 @@ project.extensions.configure<MultiLoader>("multiloader") {
                 string(scp >= "1.21.11") {
                     replace("ResourceLocation", "Identifier")
                 }
+                string(scp >= "1.19.4") {
+                    replace("CreateWorldScreen.SelectedGameMode", "WorldCreationUiState.SelectedGameMode")
+                }
             }
         }
     }
