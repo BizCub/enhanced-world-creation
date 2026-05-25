@@ -143,7 +143,8 @@ public class ExtraScreen extends Screen {
                 this.width / 2 - 50, padding.getY(6)
         );
 
-        this.addButton(Utils.getButton(this.width / 2 - 75, this.height - 28, 150, 20, CommonComponents.GUI_DONE, (button) -> onClose()));
+        //~ if >=1.17 'addButton' -> 'addRenderableWidget'
+        this.addRenderableWidget(Utils.getButton(this.width / 2 - 75, this.height - 28, 150, 20, CommonComponents.GUI_DONE, (button) -> onClose()));
     }
 
     @Override

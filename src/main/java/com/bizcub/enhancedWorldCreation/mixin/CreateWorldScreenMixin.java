@@ -118,8 +118,12 @@ public abstract class CreateWorldScreenMixin extends Screen {
     @Shadow private String initName;
     @Shadow private boolean commands;
     @Shadow private boolean commandsChanged;
-    @Shadow private Difficulty selectedDifficulty;
+    //? <1.17 {
+    /^@Shadow private Difficulty selectedDifficulty;
     @Shadow private Difficulty effectiveDifficulty;
+    ^///?} else
+    @Shadow private Difficulty difficulty;
+
     @Shadow private WorldCreationUiState.SelectedGameMode gameMode;
     @Shadow private String resultFolder;
 
@@ -135,7 +139,9 @@ public abstract class CreateWorldScreenMixin extends Screen {
         if (!Compat.isClothConfigLoaded()) return;
 
         WorldGenSettingsComponent currentSettings = this.worldGenSettingsComponent;
-        RegistryAccess.RegistryHolder registryHolder = currentSettings.registryHolder();
+//        WorldCreationContext currentContext = currentSettings.settings /^? >=1.19 >> ';'^/();
+        /^? >=1.18.2 {^/ RegistryAccess registryAccess = currentSettings.registryHolder();
+        /^?} else^/ //RegistryAccess.RegistryHolder registryAccess = currentSettings.registryHolder();
 
         Map<String, WorldPreset> worldPresets = new HashMap<>();
         WorldPreset.PRESETS.forEach(preset ->
@@ -143,8 +149,11 @@ public abstract class CreateWorldScreenMixin extends Screen {
 
         this.initName = Main.getConfig().worldName();
         this.gameMode = Main.GAME_MODES.get(Main.getConfig().gameModes().getName());
-        this.selectedDifficulty = Difficulty.byName(Main.getConfig().difficulties().getName());
+        //? <1.17 {
+        /^this.selectedDifficulty = Difficulty.byName(Main.getConfig().difficulties().getName());
         this.effectiveDifficulty = this.selectedDifficulty;
+        ^///?} else
+        this.difficulty = Difficulty.byName(Main.getConfig().difficulties().getName());
         if (Main.getConfig().allowCommands()) {
             this.commands = true;
             this.commandsChanged = true;
@@ -166,10 +175,13 @@ public abstract class CreateWorldScreenMixin extends Screen {
 
         if (currentSettings.settings.overworld() instanceof FlatLevelSource) {
             FlatLevelGeneratorSettings flatSettings = ((FlatLevelSource) currentSettings.settings.overworld()).settings();
-            flatSettings = flatSettings.withLayers(Utils.getFlatLayers(), flatSettings.structureSettings());
-            flatSettings.setBiome(() -> Utils.getBiomeById(Main.getConfig().flatBiome(), registryHolder));
-            currentSettings.settings =
-                    Utils.getSettings(new FlatLevelSource(flatSettings), currentSettings.settings, registryHolder);
+            //~ if >=1.18.2 'structureSettings' -> 'structureOverrides'
+            flatSettings = flatSettings.withLayers(Utils.getFlatLayers(), flatSettings.structureOverrides());
+            flatSettings.setBiome(/^? <1.18.2 {^/ /^() ->  ^//^?}^/ Utils.getBiomeById(Main.getConfig().flatBiome(), registryAccess));
+            currentSettings.settings = Utils.getSettings(
+                    new FlatLevelSource(/^? >=1.18.2 {^/ registryAccess.registryOrThrow(Registry.STRUCTURE_SET_REGISTRY), /^?}^/ flatSettings),
+                    currentSettings.settings, registryAccess
+            );
         }
 
         ResourceKey<NoiseGeneratorSettings> noiseGeneratorSettings = NoiseGeneratorSettings.OVERWORLD;
@@ -185,16 +197,19 @@ public abstract class CreateWorldScreenMixin extends Screen {
             case SINGLE_BIOME:
             case SINGLE_BIOME_CAVES:
             case SINGLE_BIOME_FLOATING_ISLANDS:
-                Registry<NoiseGeneratorSettings> noiseSettingsRegistry = registryHolder.registryOrThrow(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY);
-                ResourceKey<NoiseGeneratorSettings> finalNoiseGeneratorSettings = noiseGeneratorSettings;
+                Registry<NoiseGeneratorSettings> noiseSettingsRegistry = registryAccess.registryOrThrow(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY);
+                /^? <1.18.2^/ //ResourceKey<NoiseGeneratorSettings> finalNoiseGeneratorSettings = noiseGeneratorSettings;
                 currentSettings.settings = Utils.getSettings(
                         new NoiseBasedChunkGenerator(
-                                new FixedBiomeSource(Utils.getBiomeById(Main.getConfig().singleBiome(), registryHolder)),
+                                /^? >=1.18.2^/ registryAccess.registryOrThrow(Registry.STRUCTURE_SET_REGISTRY),
+                                /^? >=1.18^/ registryAccess.registryOrThrow(Registry.NOISE_REGISTRY),
+                                new FixedBiomeSource(Utils.getBiomeById(Main.getConfig().singleBiome(), registryAccess)),
                                 currentSettings.settings.seed(),
-                                () -> noiseSettingsRegistry.getOrThrow(finalNoiseGeneratorSettings)
+                                /^? >=1.18.2 {^/ noiseSettingsRegistry.getOrCreateHolder(noiseGeneratorSettings)
+                                /^?} else^/  //() -> noiseSettingsRegistry.getOrThrow(finalNoiseGeneratorSettings)
                         ),
                         currentSettings.settings,
-                        registryHolder
+                        registryAccess
                 );
                 break;
         }
@@ -202,14 +217,16 @@ public abstract class CreateWorldScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("HEAD"))
     private void addExtraButton(CallbackInfo info) {
-        this.button = this.addButton(Utils.getButton(
+        //~ if >=1.17 'addButton' -> 'addRenderableWidget'
+        this.button = this.addRenderableWidget(Utils.getButton(
                 this.width / 2 + 5, 151, 150, 20,
                 Utils.getComponent("enhanced_world_creation.extra.button", Utils.ComponentTypes.TRANSLATABLE),
                 (button) -> Minecraft.getInstance().setScreen(new ExtraScreen(Minecraft.getInstance().screen))
         ));
     }
 
-    @Inject(method = "setDisplayOptions", at = @At("TAIL"))
+    //~ if >=1.17 'setDisplayOptions' -> 'setWorldGenSettingsVisible'
+    @Inject(method = "setWorldGenSettingsVisible", at = @At("TAIL"))
     private void screenSetDisplayOptions(boolean bl, CallbackInfo ci) {
         if (this.button != null) this.button.visible = bl;
     }

@@ -16,8 +16,8 @@ public class Main {
     public static final Map<String, ResourceKey<Biome>> BIOMES = new HashMap<>();
     public static final Map<String, Block> BLOCKS = new HashMap<>();
 
-    public static String iconPath;
-    public static String resourcePackPath;
+    public static String iconPath = "";
+    public static String resourcePackPath = "";
 
     public static void init() {
         getConfig();

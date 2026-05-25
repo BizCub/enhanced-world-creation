@@ -1,20 +1,21 @@
 package com.bizcub.enhancedWorldCreation;
 
 import net.minecraft.client.gui.components.Button;
+/*? >=1.18.2*/ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 //? >=1.19.4 {
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;//?}
-/*? <1.19.4 {*/
+/*? <1.19 {*/
 /*import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;*///?}
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.WorldGenSettings;
 import net.minecraft.world.level.levelgen.flat.FlatLayerInfo;
 import net.minecraft.world.level.storage.LevelResource;
@@ -44,7 +45,7 @@ public class Utils {
     }
 
     public static Component getComponent(String text, Utils.ComponentTypes type) {
-        //? >=1.19.4 {
+        //? >=1.19 {
         return switch (type) {
             case EMPTY -> Component.empty();
             case TRANSLATABLE -> Component.translatable(text);
@@ -89,9 +90,10 @@ public class Utils {
     }
 
     //?} else {
-    /*public static Biome getBiomeById(String biomeId, RegistryAccess.RegistryHolder registryHolder) {
-        Registry<Biome> biomeRegistry = registryHolder.registryOrThrow(Registry.BIOME_REGISTRY);
-        return biomeRegistry.getOrThrow(Main.BIOMES.get(biomeId));
+    /*public static /^? <1.18.2 {^/ /^Biome ^//^?} else {^/ Holder<Biome>  /^?}^/ getBiomeById(String biomeId, RegistryAccess /^? <1.18.2 {^/ /^.RegistryHolder ^//^?}^/ registryAccess) {
+        Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registry.BIOME_REGISTRY);
+        //~ if >=1.18.2 'getOrThrow' -> 'getHolderOrThrow'
+        return biomeRegistry.getHolderOrThrow(Main.BIOMES.get(biomeId));
     }
 
     public static Block getBlockById(String blockId) {
@@ -112,14 +114,16 @@ public class Utils {
     }
 
     //? <1.19.4 {
-    /*public static <T extends ChunkGenerator> WorldGenSettings getSettings(T value, WorldGenSettings currentSettings, RegistryAccess.RegistryHolder registryHolder) {
+    /*public static <T extends ChunkGenerator> WorldGenSettings getSettings(T value, WorldGenSettings currentSettings, RegistryAccess /^? <1.18.2 {^/ /^.RegistryHolder ^//^?}^/ registryAccess) {
         return new WorldGenSettings(
                 currentSettings.seed(),
-                currentSettings.generateFeatures(),
+                //~ if >=1.19 'generateFeatures' -> 'generateStructures'
+                currentSettings.generateStructures(),
                 currentSettings.generateBonusChest(),
                 WorldGenSettings.withOverworld(
-                        registryHolder.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY),
-                        currentSettings.dimensions(),
+                        registryAccess.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY),
+                        /^? 1.18.2 {^/ /^DimensionType.defaultDimensions(registryAccess, currentSettings.seed()),
+                        ^//^?} else^/ currentSettings.dimensions(),
                         value
                 )
         );
