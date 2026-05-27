@@ -51,4 +51,8 @@ public interface ModConfig {
     default boolean bonusChest() {
         return false;
     }
+
+    default boolean decoration() {
+        return false;
+    }
 }

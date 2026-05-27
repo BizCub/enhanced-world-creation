@@ -57,6 +57,7 @@ public class CreateWorldScreenMixin {
             var layersInfo = settings.getLayersInfo();
             layersInfo.clear();
             layersInfo.addAll(Utils.getFlatLayers(registryAccess));
+            if (Main.getConfig().decoration()) settings.setDecoration();
 
             uiState.updateDimensions(PresetEditor.flatWorldConfigurator(settings.withBiomeAndLayers(
                     layersInfo,
@@ -174,6 +175,7 @@ public abstract class CreateWorldScreenMixin extends Screen {
 
         if (currentSettings.settings.overworld() instanceof FlatLevelSource) {
             FlatLevelGeneratorSettings flatSettings = ((FlatLevelSource) currentSettings.settings.overworld()).settings();
+            if (Main.getConfig().decoration()) flatSettings.setDecoration();
             //~ if >=1.18.2 'structureSettings' -> 'structureOverrides'
             flatSettings = flatSettings.withLayers(Utils.getFlatLayers(), flatSettings.structureOverrides());
             flatSettings.setBiome(/^? <1.18.2 {^/ /^() ->  ^//^?}^/ Utils.getBiomeById(Main.getConfig().flatBiome(), registryAccess));

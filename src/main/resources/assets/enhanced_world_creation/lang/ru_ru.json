@@ -10,6 +10,8 @@
     "text.autoconfig.enhanced_world_creation.option.singleBiome": "Биом мира с одним биомом",
     "text.autoconfig.enhanced_world_creation.option.generateStructures": "Генерация строений",
     "text.autoconfig.enhanced_world_creation.option.bonusChest": "Бонусный сундук",
+    "text.autoconfig.enhanced_world_creation.option.decoration": "Декор",
+    "text.autoconfig.enhanced_world_creation.option.decoration.@Tooltip": "Следует ли создавать декоративные элементы в мире?",
 
     "enhanced_world_creation.extra.button": "Дополнительные настройки",
     "enhanced_world_creation.extra.on_files_drop": "Для заполнения полей вы можете перетащить файл на экран.",

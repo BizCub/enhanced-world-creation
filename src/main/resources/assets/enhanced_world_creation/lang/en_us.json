@@ -11,6 +11,8 @@
     "text.autoconfig.enhanced_world_creation.option.seed": "Seed",
     "text.autoconfig.enhanced_world_creation.option.generateStructures": "Generate Structures",
     "text.autoconfig.enhanced_world_creation.option.bonusChest": "Bonus Chest",
+    "text.autoconfig.enhanced_world_creation.option.decoration": "Decorations",
+    "text.autoconfig.enhanced_world_creation.option.decoration.@Tooltip": "Should features be generated in the world?",
 
     "enhanced_world_creation.extra.button": "Extra Settings",
     "enhanced_world_creation.extra.on_files_drop": "To fill in the fields, you can drag the file onto the screen",

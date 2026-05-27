@@ -37,6 +37,8 @@ public class ModClothConfig implements ModConfig, ConfigData {
     public String seed = ModConfig.super.seed();
     public boolean generateStructures = ModConfig.super.generateStructures();
     public boolean bonusChest = ModConfig.super.bonusChest();
+    @ConfigEntry.Gui.Tooltip
+    public boolean decoration = ModConfig.super.decoration();
 
     @Override
     public String worldName() {
@@ -91,6 +93,11 @@ public class ModClothConfig implements ModConfig, ConfigData {
     @Override
     public boolean bonusChest() {
         return this.bonusChest;
+    }
+
+    @Override
+    public boolean decoration() {
+        return this.decoration;
     }
 
     public enum GameModes implements SelectionListEntry.Translatable {
