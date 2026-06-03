@@ -8,9 +8,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.PresetEditor;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.levelgen.FlatLevelSource;
 import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
+import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,10 +36,15 @@ public class CreateWorldScreenMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void screenInit(CallbackInfo ci) {
         if (!Compat.isClothConfigLoaded()) return;
+        var registryAccess = uiState.getSettings().worldgenLoadContext();
 
         Map<String, WorldCreationUiState.WorldTypeEntry> worldPresets = new HashMap<>();
         uiState.getAltPresetList().forEach(preset ->
                 worldPresets.put(preset.describePreset().getContents().toString().split("'")[1], preset));
+
+        //? >=26.2 {
+        /*WorldCreationUiState.WorldTypeEntry flatAll = new WorldCreationUiState.WorldTypeEntry(registryAccess.lookupOrThrow(Registries.WORLD_PRESET).getOrThrow(WorldPresets.FLAT_ALL_DIMENSIONS));
+        worldPresets.put(flatAll.describePreset().getContents().toString().split("'")[1], flatAll);*///?}
 
         uiState.setName(Main.getConfig().worldName());
         uiState.setGameMode(Main.GAME_MODES.get(Main.getConfig().gameModes().getName()));
@@ -50,7 +57,6 @@ public class CreateWorldScreenMixin {
         uiState.setGenerateStructures(Main.getConfig().generateStructures());
         uiState.setBonusChest(Main.getConfig().bonusChest());
 
-        var registryAccess = uiState.getSettings().worldgenLoadContext();
         if (uiState.getSettings().selectedDimensions().overworld() instanceof FlatLevelSource flatLevelSource) {
             FlatLevelGeneratorSettings settings = flatLevelSource.settings();
 

@@ -22,6 +22,7 @@ public class GameTabMixin {
         Main.resourcePackPath = "";
 
         Button button = Button.builder(Component.translatable("enhanced_world_creation.extra.button"), b ->
+                //~ if >=26.2 '.screen' -> '.gui.screen()'
                 Minecraft.getInstance().setScreen(new ExtraScreen(Minecraft.getInstance().screen))).width(210).build();
 
         helper.addChild(button);
