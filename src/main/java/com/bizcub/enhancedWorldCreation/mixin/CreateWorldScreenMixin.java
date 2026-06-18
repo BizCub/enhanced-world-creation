@@ -43,8 +43,8 @@ public class CreateWorldScreenMixin {
                 worldPresets.put(preset.describePreset().getContents().toString().split("'")[1], preset));
 
         //? >=26.2 {
-        /*WorldCreationUiState.WorldTypeEntry flatAll = new WorldCreationUiState.WorldTypeEntry(registryAccess.lookupOrThrow(Registries.WORLD_PRESET).getOrThrow(WorldPresets.FLAT_ALL_DIMENSIONS));
-        worldPresets.put(flatAll.describePreset().getContents().toString().split("'")[1], flatAll);*///?}
+        WorldCreationUiState.WorldTypeEntry flatAll = new WorldCreationUiState.WorldTypeEntry(registryAccess.lookupOrThrow(Registries.WORLD_PRESET).getOrThrow(WorldPresets.FLAT_ALL_DIMENSIONS));
+        worldPresets.put(flatAll.describePreset().getContents().toString().split("'")[1], flatAll);//?}
 
         uiState.setName(Main.getConfig().worldName());
         uiState.setGameMode(Main.GAME_MODES.get(Main.getConfig().gameModes().getName()));
@@ -228,7 +228,7 @@ public abstract class CreateWorldScreenMixin extends Screen {
         this.button = this.addRenderableWidget(Utils.getButton(
                 this.width / 2 + 5, 151, 150, 20,
                 Utils.getComponent("enhanced_world_creation.extra.button", Utils.ComponentTypes.TRANSLATABLE),
-                (button) -> Minecraft.getInstance().setScreen(new ExtraScreen(Minecraft.getInstance().screen))
+                (button) -> Minecraft.getInstance().gui.setScreen(new ExtraScreen(Minecraft.getInstance().screen))
         ));
     }
 

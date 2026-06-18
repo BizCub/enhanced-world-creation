@@ -1,1 +1,2 @@
-* Added a new option to generate features
+* Updated to version 26.2
+* New preset added: Flat All Dimensions
