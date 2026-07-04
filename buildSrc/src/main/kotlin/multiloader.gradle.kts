@@ -27,6 +27,9 @@ multiloader {
         }
     }
 
+    setMREnvironment(mrEnvs.clientOnly)
+    setCFEnvironment(cfEnvs.client)
+
     addDependency(
         dependency = "me.shedaniel.cloth:cloth-config-${mod.loader}:${getDep("cloth-config").split("+").first()}",
         configuration = if (isClothConfigAvailable) "implementation" else "compileOnly",
@@ -43,7 +46,7 @@ multiloader {
         addDependency(
             dependency = "net.fabricmc.fabric-api:fabric-api:${getDep("fabric-api")}",
             isPublishDepEnabled = true,
-            publishRequirement = "requires"
+            isPublishDepRequired = true
         )
         addDependency(
             dependency = "com.terraformersmc:modmenu:${getDep("modmenu")}",
