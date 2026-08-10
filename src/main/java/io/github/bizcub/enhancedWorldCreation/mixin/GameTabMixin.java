@@ -1,10 +1,9 @@
-package com.bizcub.enhancedWorldCreation.mixin;
+package io.github.bizcub.enhancedWorldCreation.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 
-//? >=1.19.3 {
-import com.bizcub.enhancedWorldCreation.Main;
-import com.bizcub.enhancedWorldCreation.gui.ExtraScreen;
+import io.github.bizcub.enhancedWorldCreation.Main;
+import io.github.bizcub.enhancedWorldCreation.gui.ExtraScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.layouts.GridLayout;
@@ -29,9 +28,3 @@ public class GameTabMixin {
         return helper;
     }
 }
-
-//?} else {
-/*@Mixin(value = {})
-public class GameTabMixin {
-
-}*///?}

@@ -1,4 +1,5 @@
 {
+    "text.autoconfig.enhanced_world_creation.title": "Enhanced World Creation",
     "text.autoconfig.enhanced_world_creation.option.worldName": "Название мира",
     "text.autoconfig.enhanced_world_creation.option.gameModes": "Режим игры",
     "text.autoconfig.enhanced_world_creation.option.difficulties": "Сложность",
@@ -12,6 +13,21 @@
     "text.autoconfig.enhanced_world_creation.option.bonusChest": "Бонусный сундук",
     "text.autoconfig.enhanced_world_creation.option.decoration": "Декор",
     "text.autoconfig.enhanced_world_creation.option.decoration.@Tooltip": "Следует ли создавать декоративные элементы в мире?",
+
+    "text.enhanced_world_creation.group.general": "Enhanced World Creation",
+    "text.enhanced_world_creation.option.worldName": "Название мира",
+    "text.enhanced_world_creation.option.gameModes": "Режим игры",
+    "text.enhanced_world_creation.option.difficulties": "Сложность",
+    "text.enhanced_world_creation.option.allowCommands": "Использование команд",
+    "text.enhanced_world_creation.option.worldTypes": "Тип мира",
+    "text.enhanced_world_creation.option.seed": "Ключ для генерации мира",
+    "text.enhanced_world_creation.option.flatLayers": "Слои суперплоского мира",
+    "text.enhanced_world_creation.option.flatBiome": "Биом суперплоского мира",
+    "text.enhanced_world_creation.option.singleBiome": "Биом мира с одним биомом",
+    "text.enhanced_world_creation.option.generateStructures": "Генерация строений",
+    "text.enhanced_world_creation.option.bonusChest": "Бонусный сундук",
+    "text.enhanced_world_creation.option.decoration": "Декор",
+    "text.enhanced_world_creation.option.decoration.tooltip": "Следует ли создавать декоративные элементы в мире?",
 
     "enhanced_world_creation.extra.button": "Дополнительные настройки",
     "enhanced_world_creation.extra.on_files_drop": "Для заполнения полей вы можете перетащить файл на экран.",

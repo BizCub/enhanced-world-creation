@@ -1,8 +1,8 @@
 //? fabric {
-package com.bizcub.enhancedWorldCreation.platform;
+package io.github.bizcub.enhancedWorldCreation.platform;
 
-import com.bizcub.enhancedWorldCreation.Main;
-import com.bizcub.enhancedWorldCreation.config.Compat;
+import io.github.bizcub.enhancedWorldCreation.Main;
+import io.github.bizcub.enhancedWorldCreation.config.ConfigHelper;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import net.fabricmc.api.ClientModInitializer;
@@ -18,7 +18,7 @@ public class Fabric implements ClientModInitializer {
 
         @Override
         public ConfigScreenFactory<?> getModConfigScreenFactory() {
-            return Compat::getScreen;
+            return ConfigHelper::getScreen;
         }
     }
 }//?}

@@ -1,8 +1,10 @@
-package com.bizcub.enhancedWorldCreation;
+package io.github.bizcub.enhancedWorldCreation;
 
-import com.bizcub.enhancedWorldCreation.config.ModConfig;
-/*? >=1.19.3*/ import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
-import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
+import io.github.bizcub.enhancedWorldCreation.config.ClothConfig;
+import io.github.bizcub.enhancedWorldCreation.config.Config;
+import io.github.bizcub.enhancedWorldCreation.config.ConfigHelper;
+import io.github.bizcub.enhancedWorldCreation.config.SimpleConfig;
+import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -20,15 +22,15 @@ public class Main {
     public static String resourcePackPath = "";
 
     public static void init() {
-        getConfig();
+        if (ConfigHelper.isSimpleConfigLoaded()) {
+            Config.set(SimpleConfig.getInstance().get());
+        } else if (ConfigHelper.isClothConfigLoaded()) {
+            Config.set(ClothConfig.getInstance());
+        }
 
         GAME_MODES.put("survival", WorldCreationUiState.SelectedGameMode.SURVIVAL);
         GAME_MODES.put("hardcore", WorldCreationUiState.SelectedGameMode.HARDCORE);
         GAME_MODES.put("creative", WorldCreationUiState.SelectedGameMode.CREATIVE);
         GAME_MODES.put("spectator", WorldCreationUiState.SelectedGameMode.DEBUG);
-    }
-
-    public static ModConfig getConfig() {
-        return ModConfig.CONFIG;
     }
 }

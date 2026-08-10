@@ -1,13 +1,9 @@
 {
     "required": true,
-    "package": "com.bizcub.enhancedWorldCreation.mixin",
+    "package": "io.github.bizcub.enhancedWorldCreation.mixin",
     "injectors": {
         "defaultRequire": 1
     },
-    "mixins": [
-        "BiomesMixin",
-        "BlocksMixin"
-    ],
     "client": [
         "CreateWorldScreenMixin",
         "GameTabMixin"
