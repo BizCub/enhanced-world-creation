@@ -30,8 +30,8 @@ multiloader {
 
     versionRange("26.2", to = "latest")
     versionRange("1.21.3", to = "1.21.11")
-    versionRange("1.21.1", to = "1.20.5", loader = "fabric")
-    versionRange("1.21.1", to = "1.20.6", loader = "forge")
+    versionRange("1.21.1", from = "1.20.5", loader = "fabric")
+    versionRange("1.21.1", from = "1.20.6", loader = "forge")
     versionRange("1.20.2", to = "1.20.4")
 
     addDependency(
