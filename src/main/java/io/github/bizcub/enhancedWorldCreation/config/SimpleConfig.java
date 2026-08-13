@@ -15,12 +15,15 @@ public class SimpleConfig implements Config {
 
     public String worldName = Config.super.worldName();
 
+    @EnumConfig(translate = true)
     public GameModes gameModes = Config.super.gameModes();
 
+    @EnumConfig(translate = true)
     public Difficulties difficulties = Config.super.difficulties();
 
     public boolean allowCommands = Config.super.allowCommands();
 
+    @EnumConfig(translate = true)
     public WorldTypes worldTypes = Config.super.worldTypes();
 
     public List<String> flatLayers = Config.super.flatLayers();

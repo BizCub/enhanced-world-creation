@@ -15,7 +15,8 @@ public enum WorldTypes {
         this.translate = "generator.minecraft." + key;
     }
 
-    public String getKey() {
+    @Override
+    public String toString() {
         return this.translate;
     }
 }

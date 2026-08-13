@@ -18,7 +18,8 @@ public enum Difficulties {
         return this.key;
     }
 
-    public String getKey() {
+    @Override
+    public String toString() {
         return this.translate;
     }
 }

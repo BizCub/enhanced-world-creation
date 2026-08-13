@@ -52,7 +52,7 @@ public class CreateWorldScreenMixin {
         //~ if >=1.21 'setAllowCheats' -> 'setAllowCommands'
         uiState.setAllowCommands(Config.get().allowCommands());
 
-        uiState.setWorldType(worldPresets.get(Config.get().worldTypes().getKey()));
+        uiState.setWorldType(worldPresets.get(Config.get().worldTypes().toString()));
         uiState.setSeed(Config.get().seed());
         uiState.setGenerateStructures(Config.get().generateStructures());
         uiState.setBonusChest(Config.get().bonusChest());
