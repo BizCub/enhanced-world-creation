@@ -78,12 +78,8 @@ public class CreateWorldScreenMixin {
     }
 
     @Inject(method = "createNewWorld", at = @At("HEAD"))
-    private void createRPFolder(/*? >=1.21.2 {*/ CallbackInfoReturnable<Boolean> cir /*?} else {*/ /*CallbackInfo ci *//*?}*/) {
+    private void prepareResources(/*? >=1.21.2 {*/ CallbackInfoReturnable<Boolean> cir /*?} else {*/ /*CallbackInfo ci *//*?}*/) throws IOException {
         new File(pathToSavesFolder + uiState.getTargetFolder() + "/resourcepacks").mkdirs();
-    }
-
-    @Inject(method = "createNewWorld", at = @At("TAIL"))
-    private void copyResources(/*? >=1.21.2 {*/ CallbackInfoReturnable<Boolean> cir /*?} else {*/ /*CallbackInfo ci *//*?}*/) throws IOException {
         Utils.copyResources(pathToSavesFolder, uiState.getTargetFolder());
     }
 }

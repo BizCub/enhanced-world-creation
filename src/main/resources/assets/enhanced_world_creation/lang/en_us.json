@@ -32,6 +32,5 @@
     "enhanced_world_creation.extra.button": "Extra Settings",
     "enhanced_world_creation.extra.on_files_drop": "To fill in the fields, you can drag the file onto the screen",
     "enhanced_world_creation.extra.icon": "World Icon",
-    "enhanced_world_creation.extra.rp": "World Resource Pack",
-    "enhanced_world_creation.extra.rp.warning": "For the resource pack to start working, you need to re-enter the world after creation"
+    "enhanced_world_creation.extra.rp": "World Resource Pack"
 }

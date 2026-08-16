@@ -85,7 +85,6 @@ public class ExtraScreen extends Screen {
     }
 
     private void addResourcePack(String value) {
-        this.tip.setMessage(Component.translatable("enhanced_world_creation.extra.rp.warning"));
         refreshWidgets();
         this.resourcePackPathBox.setValue(value);
     }

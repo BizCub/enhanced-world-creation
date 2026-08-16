@@ -32,6 +32,5 @@
     "enhanced_world_creation.extra.button": "Дополнительные настройки",
     "enhanced_world_creation.extra.on_files_drop": "Для заполнения полей вы можете перетащить файл на экран.",
     "enhanced_world_creation.extra.icon": "Иконка мира",
-    "enhanced_world_creation.extra.rp": "Мировой пакет ресурсов",
-    "enhanced_world_creation.extra.rp.warning": "Чтобы пакет ресурсов начал работать, вам нужно перезайти в мир после его создания"
+    "enhanced_world_creation.extra.rp": "Мировой пакет ресурсов"
 }
