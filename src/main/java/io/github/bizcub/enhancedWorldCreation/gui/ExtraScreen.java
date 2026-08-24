@@ -45,6 +45,9 @@ public class ExtraScreen extends Screen {
         this.iconPathBox.setValue(Main.iconPath);
         this.resourcePackPathBox.setValue(Main.resourcePackPath);
 
+        this.iconPathBox.setResponder(value -> Main.iconPath = value);
+        this.resourcePackPathBox.setResponder(value -> Main.resourcePackPath = value);
+
         HeaderAndFooterLayout layout = new HeaderAndFooterLayout(this, 61, 33);
         AbstractWidget doneButton = Button.builder(CommonComponents.GUI_DONE, button -> onClose()).pos(this.width / 2 - 75, this.height - 28).size(150, 20).build();
         layout.addToFooter(doneButton);
@@ -80,8 +83,6 @@ public class ExtraScreen extends Screen {
         } else {
             addResourcePack(file.getAbsolutePath());
         }
-        Main.iconPath = iconPathBox.getValue();
-        Main.resourcePackPath = resourcePackPathBox.getValue();
     }
 
     private void addResourcePack(String value) {

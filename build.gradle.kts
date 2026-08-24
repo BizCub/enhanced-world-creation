@@ -35,7 +35,7 @@ multiloader {
     versionRange("1.20.2", to = "1.20.4")
 
     addDependency(
-        dependency = "io.github.bizcub:simple-config-lib:1.0-${mod.loader}+${mod.mc}"
+        dependency = "maven.modrinth:simple-config-lib:${getDep("simple-config-lib")}"
     )
     addDependency(
         dependency = "me.shedaniel.cloth:cloth-config-${mod.loader}:${getDep("cloth-config").split("+").first()}",
