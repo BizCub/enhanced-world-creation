@@ -48,8 +48,7 @@ public class Utils {
     }
 
     public static Identifier getDefaultId(String id) {
-        /*? >=1.21 {*/ return Identifier.withDefaultNamespace(id);
-         /*?} else*/ //return new Identifier(id);
+        return Identifier.withDefaultNamespace(id);
     }
 
     public static Button getButton(int x, int y, int width, int height, Component component, Button.OnPress onPress) {
