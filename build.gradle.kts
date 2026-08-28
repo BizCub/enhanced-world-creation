@@ -15,7 +15,8 @@ multiloader {
             replace("GuiGraphics", "GuiGraphicsExtractor")
         }
         string(scp >= "1.21.11" && !isForge, "auto_config") {
-            replace("AutoConfig", "AutoConfigClient")
+            replace("me.shedaniel.autoconfig.AutoConfig", "me.shedaniel.autoconfig.AutoConfigClient")
+            replace("AutoConfig.getConfigScreen", "AutoConfigClient.getConfigScreen")
         }
         string(scp >= "1.21.11") {
             replace("ResourceLocation", "Identifier")
@@ -35,7 +36,7 @@ multiloader {
     versionRange("1.20.2", to = "1.20.4")
 
     addDependency(
-        dependency = "maven.modrinth:simple-config-lib:${getDep("simple-config-lib")}",
+        dependency = getSimpleConfigLibDep("1.1"),
         isPublishDepEnabled = true
     )
     addDependency(
