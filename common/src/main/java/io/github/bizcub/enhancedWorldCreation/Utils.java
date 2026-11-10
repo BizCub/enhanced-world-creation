@@ -1,0 +1,156 @@
+package io.github.bizcub.enhancedWorldCreation;
+
+import io.github.bizcub.enhancedWorldCreation.config.Config;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.flat.FlatLayerInfo;
+import net.minecraft.world.level.storage.LevelResource;
+import org.apache.commons.io.FileUtils;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+public class Utils {
+
+    public static Component getComponent() {
+        return getComponent("", ComponentTypes.EMPTY);
+    }
+
+    public static Component getComponent(String text, Utils.ComponentTypes type) {
+        return switch (type) {
+            case EMPTY -> Component.empty();
+            case TRANSLATABLE -> Component.translatable(text);
+            default -> Component.literal(text);
+        };
+    }
+
+    public static Identifier getDefaultId(String id) {
+        return Identifier.withDefaultNamespace(id);
+    }
+
+    public static Button getButton(int x, int y, int width, int height, Component component, Button.OnPress onPress) {
+        return Button.builder(component, onPress).pos(x, y).size(width, height).build();
+    }
+
+    public static Holder<Biome> getBiomeById(String biomeId, RegistryAccess registryAccess) {
+        ResourceKey<Biome> biomeKey = ResourceKey.create(Registries.BIOME, Utils.getDefaultId(biomeId));
+        Registry<Biome> biomes = registryAccess.lookupOrThrow(Registries.BIOME);
+        Biome biome = biomes.getValue(biomeKey);
+        return biome != null
+                ? biomes.getOrThrow(biomeKey)
+                : biomes.getOrThrow(Biomes.PLAINS);
+    }
+
+    public static Block getBlockById(String blockId, RegistryAccess registryAccess) {
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Utils.getDefaultId(blockId));
+        Registry<Block> blocks = registryAccess.lookupOrThrow(Registries.BLOCK);
+        return blocks.getValue(blockKey);
+    }
+
+    public static List<FlatLayerInfo> getFlatLayers(RegistryAccess registryAccess) {
+        List<FlatLayerInfo> layers = new ArrayList<>();
+        Config.get().flatLayers().forEach(flatLayer -> {
+            boolean isHaveStar = flatLayer.split("\\*").length >= 2;
+            List<String> layerSplit = Arrays.asList(flatLayer.split("\\*"));
+            int blockCount = isHaveStar ? Integer.parseInt(layerSplit.get(0)) : 1;
+            String layer = isHaveStar ? layerSplit.get(1) : flatLayer;
+            Block block = getBlockById(layer, registryAccess);
+            if (block != null)
+                layers.add(new FlatLayerInfo(blockCount, block));
+        });
+        Collections.reverse(layers);
+        return layers;
+    }
+
+    public static void copyResources(String pathToWorld, String worldName) throws IOException {
+        if (!Main.iconPath.isEmpty()) {
+            try {
+                FileUtils.copyFile(
+                        new File(Main.iconPath),
+                        new File(pathToWorld + worldName + "/icon.png")
+                );
+                BufferedImage originalImage = ImageIO.read(new File(Main.iconPath));
+                BufferedImage resizedImage = new BufferedImage(64, 64, BufferedImage.TYPE_INT_RGB);
+                Graphics2D g = resizedImage.createGraphics();
+
+                g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                g.drawImage(originalImage, 0, 0, 64, 64, null);
+                g.dispose();
+                ImageIO.write(resizedImage, "png", new File(pathToWorld + worldName + "/icon.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!Main.resourcePackPath.isEmpty()) {
+            String inputPath = Main.resourcePackPath;
+            String outputPath = pathToWorld + worldName + LevelResource.MAP_RESOURCE_FILE;
+
+            if (new File(inputPath).isFile()) {
+                try {
+                    FileUtils.copyFile(new File(Main.resourcePackPath), new File(outputPath));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Path sourceDir = Paths.get(inputPath);
+
+                try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(outputPath))) {
+                    Files.walk(sourceDir).forEach(path -> {
+                        try {
+                            String relativePath = sourceDir.relativize(path).toString();
+                            relativePath = relativePath.replace("\\", "/");
+
+                            if (Files.isDirectory(path)) {
+                                if (!relativePath.isEmpty()) {
+                                    ZipEntry dirEntry = new ZipEntry(relativePath + "/");
+                                    zos.putNextEntry(dirEntry);
+                                    zos.closeEntry();
+                                }
+                            } else {
+                                ZipEntry fileEntry = new ZipEntry(relativePath);
+                                zos.putNextEntry(fileEntry);
+                                Files.copy(path, zos);
+                                zos.closeEntry();
+                            }
+                        } catch (IOException e) {
+                            throw new UncheckedIOException(e);
+                        }
+                    });
+                } catch (UncheckedIOException e) {
+                    throw e.getCause();
+                }
+            }
+        }
+    }
+
+    public enum ComponentTypes {
+        EMPTY, LITERAL, TRANSLATABLE
+    }
+}
