@@ -1,7 +1,3 @@
-plugins {
-    id("io.github.bizcub.multiloader")
-}
-
 multiloader {
     setMREnvironment(mrEnvs.clientOnly)
     setCFEnvironment(cfEnvs.client)
